@@ -16,7 +16,8 @@ LIBS=$(shell $(CONFIG) --libs) -lqio #  $(MGLIBS)
 HDRS=\
 Macros_head
 
-OBJSglc=chroma.o \
+OBJS=chroma.o \
+	io_general.o io_general_class.o\
 Macros_obj
 
 chroma: $(OBJS)

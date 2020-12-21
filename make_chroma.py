@@ -11,7 +11,7 @@ files = ["inline_tests","inline_cluster_dec"]
 
 def GenerateChromaMacros(files):
     """
-    根据files自动产生chroma.cc文件中的依赖 
+    根据files自动产生chroma.cc文件中的依赖
     """
     ChromaMacros = {"Macros_head": "", "Macros_foo": ""}
     tmp = ['#include "%s.h" \n' % i for i in files]
@@ -26,8 +26,8 @@ def GenerateMakefile(files):
     根据files自动产生Makefile文件
     """
     MakeMacros = {}
-    MakeMacros["Macros_head"] = "".join(["\t%s.h \\ \n"%i for i in files ])
-    MakeMacros["Macros_obj"] = "".join(["\t%s.o \\ \n"%i for i in files ])
+    MakeMacros["Macros_head"] = "".join(["\t%s.h \\\n"%i for i in files ])
+    MakeMacros["Macros_obj"] = "".join(["\t%s.o \\\n"%i for i in files ])
     return MakeMacros
 
 
