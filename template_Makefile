@@ -1,0 +1,29 @@
+#TOPDIR=${HOME}/bin/
+#CHROMA=/global/project/projectdirs/mp7/chroma_single
+#TOPDIR=/public/home/ybyang/opt/chroma_code
+#CHROMA=/public/home/guilc/source_codes/chroma/build/chroma
+#CHROMA=/home/guilongcheng/chroma/chroma_qdpjit_quda/install/chroma-double
+#CHROMA=/home/guilongcheng/chroma/chroma_qdpxx_quda/install/chroma_qdpxx-double
+CONFIG=chroma-config
+
+
+CXX=$(shell $(CONFIG) --cxx)
+CXXFLAGS=$(shell $(CONFIG) --cxxflags)  -fpermissive# -I$(TOPDIR)/qla/include -I. $(MGCXXFLAGS) 
+#CXXFLAGS=-D_PDF_ $(shell $(CONFIG) --cxxflags) -I$(TOPDIR)/qla/include -I. $(MGCXXFLAGS) 
+LDFLAGS=$(shell $(CONFIG) --ldflags) #  $(MGLDFLAGS)
+LIBS=$(shell $(CONFIG) --libs) -lqio #  $(MGLIBS)
+
+HDRS=\
+Macros_head
+
+OBJSglc=chroma.o \
+Macros_obj
+
+chroma: $(OBJS)
+	$(CXX) -o $@ $(CXXFLAGS) $(OBJS) $(LDFLAGS) $(LIBS)
+
+%.o: %.cc $(HDRS)
+	$(CXX) $(CXXFLAGS) -c $< 
+
+clean:
+	rm -rf chroma $(OBJS) *~

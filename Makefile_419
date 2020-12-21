@@ -1,0 +1,102 @@
+#TOPDIR=${HOME}/bin/
+#CHROMA=/global/project/projectdirs/mp7/chroma_single
+TOPDIR=/public/home/ybyang/opt/new/
+#CHROMA=/public/home/ybyang/sunpeng/chroma_gpu/bin_single/chroma_gpu
+CHROMA=/public/home/ybyang/opt/new/chroma_cpu_single
+CONFIG=$(CHROMA)/bin/chroma-config
+
+MGLIBS= -lwilsonmg -lqopqdp -lqdp_common -lqdp_int -lqdp_f -lqdp_d -lqdp_df -lqdp_f2 -lqdp_d2 -lqdp_df2 -lqdp_f3 -lqdp_d3 -lqdp_df3 -lqdp_fn -lqdp_dn -lqdp_dfn -lqio -llime -lqla_c99 -lqla_cmath -lqla_d2 -lqla_d3 -lqla_d -lqla_df2 -lqla_df3 -lqla_df -lqla_dfn -lqla_dn -lqla_dq2 -lqla_dq3 -lqla_dq -lqla_dqn -lqla_f2 -lqla_f3 -lqla_f -lqla_fn -lqla_int -lqla_q2 -lqla_q3 -lqla_q -lqla_qn -lqla_random
+MGLDFLAGS=-L$(TOPDIR)/qla/lib -L$(TOPDIR)/lib -L$(TOPDIR)/qopqdp/lib
+MGCXXFLAGS=-L$(TOPDIR)/qla/lib -L$(TOPDIR)/qdp/lib -L$(TOPDIR)/qopqdp/lib
+
+CXX=$(shell $(CONFIG) --cxx) -D__HIP_PLATFORM_HCC__
+CXXFLAGS=$(shell $(CONFIG) --cxxflags) -I$(TOPDIR)/qla/include -I. $(MGCXXFLAGS) 
+#CXXFLAGS=-D_PDF_ $(shell $(CONFIG) --cxxflags) -I$(TOPDIR)/qla/include -I. $(MGCXXFLAGS) 
+LDFLAGS=$(shell $(CONFIG) --ldflags) $(MGLDFLAGS)
+LIBS=$(shell $(CONFIG) --libs) $(MGLIBS)
+
+
+HDRSglc=inline_linear_divergence.h \
+     inline_linear_divergence2.h \
+     inline_cluster_dec.h \
+     inline_tests.h
+#head
+
+OBJSglc=chroma-glc.o \
+     io_general.o io_general_class.o\
+     inline_linear_divergence.o \
+     inline_linear_divergence2.o \
+     inline_cluster_dec.o \
+     inline_tests.o
+#object
+
+HDRS=momentum_volume_npr_source.h \
+     grid_source.h \
+     mom_quark_smearing.h \
+     npr_vertex_pdf.h \
+     inline_npr_vertex_pdf.h \
+     quda_multigrid_params.h \
+     syssolver_linop_clover_quda_multigrid_w.h \
+     syssolver_mdagm_clover_quda_multigrid_w.h \
+     quda_mg_utils.h \
+     syssolver_quda_multigrid_clover_params.h \
+     syssolver_linop_clover_quda_w.h \
+     sftmom.h\
+     simple_baryon_seqsrc_w.h \
+     inline_qpropadd_w.h \
+     inline_seqsource_fast_w.h \
+     inline_erase_quda_multigrid_space.h \
+     inline_loop_w.h \
+     inline_hadspec_w.h \
+     inline_building_blocks_w.h \
+     inline_building_x_w.h \
+     inline_pion_DA.h \
+     inline_tests.h \
+     inline_linear_divergence.h \
+     inline_linear_divergence2.h \
+     inline_cluster_dec.h\
+#head
+
+OBJS=chroma.o \
+     io_general.o io_general_class.o\
+     kyuqprop_io.o\
+     momentum_volume_npr_source.o \
+     grid_source.o \
+     mom_quark_smearing.o \
+     npr_vertex_pdf.o \
+     inline_npr_vertex_pdf.o \
+     quda_multigrid_params.o \
+     syssolver_linop_clover_quda_multigrid_w.o \
+     syssolver_mdagm_clover_quda_multigrid_w.o \
+     syssolver_quda_multigrid_clover_params.o \
+     syssolver_linop_clover_quda_w.o \
+     sftmom.o\
+     simple_baryon_seqsrc_w.o \
+     inline_qpropadd_w.o \
+     inline_seqsource_fast_w.o \
+     inline_erase_quda_multigrid_space.o \
+     inline_loop_w.o \
+     inline_hadspec_w.o \
+     inline_building_blocks_w.o \
+     inline_building_x_w.o \
+     inline_pion_DA.o \
+     inline_tests.o \
+     inline_linear_divergence.o \
+     inline_linear_divergence2.o \
+     inline_cluster_dec.o\
+#object
+
+chroma-glc: $(OBJS)
+	$(CXX) -o $@ $(CXXFLAGS) $(OBJS) $(LDFLAGS) $(LIBS)
+
+chroma: $(OBJS)
+        $(CXX) -o $@ $(CXXFLAGS) $(OBJS) $(LDFLAGS) $(LIBS)
+
+
+
+
+%.o: %.cc $(HDRS)
+	$(CXX) $(CXXFLAGS) -c $< 
+
+clean:
+	rm -rf chroma $(OBJS) *~
