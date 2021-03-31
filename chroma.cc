@@ -5,9 +5,7 @@
 
 #include "chroma.h"
  // New measurement headers go here
-
-#include "inline_tests.h" 
-#include "inline_cluster_dec.h" 
+#include "register_new.h" 
 
 //include
 
@@ -72,13 +70,9 @@ bool linkageHack(void)
   // Inline Measurements
   foo &= InlineAggregateEnv::registerAll();
   foo &= GaugeInitEnv::registerAll();
-
   // New measurement registrations go here
-  foo &= InlineTestsEnv::registerAll(); 
-  foo &= InlineClusterDecEnv::registerAll(); 
-
+  register_new(foo);
 //foo
-
   return foo;
 }
 
