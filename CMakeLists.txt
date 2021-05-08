@@ -1,16 +1,13 @@
 # basic setup for cmake
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
-set(CHROMAHOME /Users/guilongcheng/opt/bin)
-set(CMAKE_INSTALL_PREFIX /User/guilongcheng/opt/chroma_addons)
-
-execute_process(COMMAND ${CHROMAHOME}/chroma-config --cxx
+execute_process(COMMAND chroma-config --cxx
 OUTPUT_VARIABLE CHROMA_CXX OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND ${CHROMAHOME}/chroma-config --ldflags
+execute_process(COMMAND chroma-config --ldflags
 OUTPUT_VARIABLE CHROMA_LDFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND ${CHROMAHOME}/chroma-config --cxxflags
+execute_process(COMMAND chroma-config --cxxflags
 OUTPUT_VARIABLE CHROMA_CXXFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND ${CHROMAHOME}/chroma-config --libs
+execute_process(COMMAND chroma-config --libs
 OUTPUT_VARIABLE CHROMA_LIBS OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 message("CHROMA_CXX ${CHROMA_CXX}")
