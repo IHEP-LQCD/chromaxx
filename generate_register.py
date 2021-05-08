@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[14]:
+# In[1]:
 
 
 import os
@@ -10,7 +10,7 @@ import re
 
 # # 定义模版文件
 
-# In[61]:
+# In[2]:
 
 
 temp_cc =["""#include "register_new.h"
@@ -38,7 +38,7 @@ void register_new(bool &);
 
 # # 定位文件
 
-# In[16]:
+# In[3]:
 
 
 files = os.listdir("./compile_src/")
@@ -50,10 +50,11 @@ inline_f = ["./compile_src/"+i for i in inline_f ]
 
 # # 写入头文件
 
-# In[42]:
+# In[4]:
 
 
 w_heas = ["#include"+'"'+i+'"' for i in heads]
+w_heas.append("#include"+'"aniso_spectrum_gaugeact2.h"') # 手动添加 purgaug相关的头文件
 with open("register_new.h","w") as f:
     f.write(temp_h[0])
     for i in w_heas:
@@ -63,7 +64,7 @@ with open("register_new.h","w") as f:
 
 # # 写入cc文件
 
-# In[48]:
+# In[5]:
 
 
 env_list=[]
@@ -75,9 +76,10 @@ for i in inline_f:
                 env_list.append(searchObj.group())
                 break
 w_env = ["foo &= %s::registerAll();"%i for i in env_list]
+w_env.append("foo &= AnisoSpectrumGaugeActEnv2::registerAll();")# 手动添加 purgaug相关的类
 
 
-# In[63]:
+# In[6]:
 
 
 with open("register_new.cc","w") as f:
