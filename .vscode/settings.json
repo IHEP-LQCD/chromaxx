@@ -1,7 +1,0 @@
-{
-    "jupyter.jupyterServerType": "local",
-    "files.associations": {
-        "__config": "cpp",
-        "atomic": "cpp"
-    }
-}
