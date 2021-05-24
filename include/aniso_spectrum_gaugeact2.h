@@ -93,11 +93,11 @@ public:
     multi2d<Double> plane_plaq;
     MesPlq(u, w_plaq, s_plaq, t_plaq, plane_plaq, link);
     Real u_s = pow(s_plaq,0.25);
-    Real u_t = pow(t_plaq,0.25);
     Real u_s_2 = u_s * u_s;
     Real u_s_4 = u_s_2 * u_s_2;
-    Real u_t_2 = u_t * u_t;
     Real u_s_6 = u_s_4 * u_s_2;
+    Real u_t = pow(t_plaq / u_s_2 ,0.5);
+    Real u_t_2 = u_t * u_t;
     param.plaq_c_s = param.beta * Real(5) / (Real(3) * u_s_4);
     if (param.aniso.anisoP)
       param.plaq_c_s /= param.aniso.xi_0;
@@ -141,6 +141,7 @@ public:
         coeff_p = param.plaq_c_s;
         coeff_r = param.rect_c_s;
       }
+      QDPIO::cout << "coeff_p and coeff_r are: "<< coeff_p << coeff_r << std::endl;
 
       LatticeColorMatrix tmp1 = shift(u[nu], FORWARD, mu);
       LatticeColorMatrix tmp2 = shift(u[mu], FORWARD, mu);

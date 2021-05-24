@@ -370,19 +370,20 @@ doWarmUp(XMLWriter &xml_out, multi1d<LatticeColorMatrix> &u,
     write(xml_out, "update_no", cur_update);
     write(xml_out, "WarmUpP", true);
 
-    // Do the update, but with no measurements
-    mciter(u, S_g, hb_control.hbitr_params.hb_params); // one hb sweep
-
-    // Do measurements
-    doMeas(xml_out, u, hb_control, true, cur_update, default_measurements,
-           user_measurements);
-
     // add by glc
     // read plaq to us
     if (hb_control.update_us2) {
       auto S_g_glc = dynamic_cast<const AnisoSpectrumGaugeAct2 &>(S_g);
       S_g_glc.update_coeff(u);
     }
+
+
+    // Do the update, but with no measurements
+    mciter(u, S_g, hb_control.hbitr_params.hb_params); // one hb sweep
+
+    // Do measurements
+    doMeas(xml_out, u, hb_control, true, cur_update, default_measurements,
+           user_measurements);
 
     pop(xml_out); // pop("Update");
     pop(xml_out); // pop("elem");
