@@ -92,8 +92,8 @@ public:
     Double w_plaq, s_plaq, t_plaq, link;
     multi2d<Double> plane_plaq;
     MesPlq(u, w_plaq, s_plaq, t_plaq, plane_plaq, link);
-    Real u_s = pow(s_plaq,0.25);
-    Real u_t = pow(t_plaq,0.25);
+    Real u_s = pow(s_plaq, 0.25);
+    Real u_t = pow(t_plaq, 0.25);
     Real u_s_2 = u_s * u_s;
     Real u_s_4 = u_s_2 * u_s_2;
     Real u_t_2 = u_t * u_t;
