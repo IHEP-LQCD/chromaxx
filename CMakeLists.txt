@@ -15,16 +15,19 @@ message("CHROMA_LDFLAGS ${CHROMA_LDFLAGS}")
 message("CHROMA_CXXFLAGS ${CHROMA_CXXFLAGS}")
 message("CHROMA_LIBS ${CHROMA_LIBS}")
 
-PROJECT(chroma_addons)				            #设置工程名
-MESSAGE(STATUS "Project chroma_addons")	 	    #打印消息
+PROJECT(chromaxx)				            #设置工程名
+MESSAGE(STATUS "Project chromaxx")	 	    #打印消息
 
 set(CMAKE_CXX_FLAGS ${CHROMA_CXXFLAGS})
 
-include_directories("./include")
-
 add_subdirectory(src)
-add_executable(chroma_addons chroma.cc register_new.cc)
-target_link_libraries(chroma_addons chroma_clqcd ${CHROMA_LDFLAGS} ${CHROMA_LIBS})
-add_executable(purgauge_addons purgaug.cc register_new.cc)
-target_link_libraries(purgauge_addons chroma_clqcd ${CHROMA_LDFLAGS} ${CHROMA_LIBS})
-install(TARGETS chroma_addons)
+add_executable(chromaxx chroma.cc register_new.cc)
+target_link_libraries(chromaxx chromaxx_clqcd ${CHROMA_LDFLAGS} ${CHROMA_LIBS})
+add_executable(purgaugexx purgaug.cc register_new.cc)
+target_link_libraries(purgaugexx chromaxx_clqcd ${CHROMA_LDFLAGS} ${CHROMA_LIBS})
+install(TARGETS chromaxx purgaugexx chromaxx_clqcd
+		RUNTIME DESTINATION bin
+		LIBRARY DESTINATION lib
+		ARCHIVE DESTINATION lib)
+install(DIRECTORY include/ DESTINATION include
+		FILES_MATCHING PATTERN "*.h")
