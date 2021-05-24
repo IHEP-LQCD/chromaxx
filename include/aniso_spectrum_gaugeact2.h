@@ -126,8 +126,8 @@ public:
     const multi1d<LatticeColorMatrix> &u = state->getLinks();
 
     result = zero;
-    Real coeff_p;
-    Real coeff_r;
+    Complex coeff_p;
+    Complex coeff_r;
     bool ifspace;
 
     for (int nu = 0; nu < Nd; ++nu) {
