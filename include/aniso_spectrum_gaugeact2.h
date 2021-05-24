@@ -115,7 +115,7 @@ public:
     if (param.aniso.anisoP)
       param.rect_c_t_2 *= param.aniso.xi_0;
 
-    QDPIO::cout << "plaq_c_s plaq_c_t rect_c_s rect_c_t_2 are: " << param.plaq_c_s<<param.plaq_c_t<<param.rect_c_s<<param.rect_c_t_2 << coeff_r << std::endl;
+    QDPIO::cout << "plaq_c_s plaq_c_t rect_c_s rect_c_t_2 are: " << param.plaq_c_s<<param.plaq_c_t<<param.rect_c_s<<param.rect_c_t_2 <<std::endl;
   }
 
   //! Compute staple
