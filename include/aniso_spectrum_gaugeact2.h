@@ -98,6 +98,7 @@ public:
     Real u_s_6 = u_s_4 * u_s_2;
     Real u_t = pow(t_plaq / u_s_2 ,0.5);
     Real u_t_2 = u_t * u_t;
+    QDPIO::cout << "s_plaq t_plaq u_s u_t are: " << s_plaq<< t_plaq<<u_s<< u_t << std::endl;
     param.plaq_c_s = param.beta * Real(5) / (Real(3) * u_s_4);
     if (param.aniso.anisoP)
       param.plaq_c_s /= param.aniso.xi_0;
@@ -113,6 +114,8 @@ public:
         -param.beta / (Real(12) * u_s_4 * u_t_2) * param.aniso.xi_0;
     if (param.aniso.anisoP)
       param.rect_c_t_2 *= param.aniso.xi_0;
+
+    QDPIO::cout << "plaq_c_s plaq_c_t rect_c_s rect_c_t_2 are: " << param.plaq_c_s<<param.plaq_c_t<<param.rect_c_s<<param.rect_c_t_2 << coeff_r << std::endl;
   }
 
   //! Compute staple
