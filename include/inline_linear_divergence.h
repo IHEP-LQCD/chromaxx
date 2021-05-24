@@ -13,70 +13,62 @@
 #include "meas/inline/abs_inline_measurement.h"
 #include "io/qprop_io.h"
 
-namespace Chroma
-{
-  /*! \ingroup inlinehadron */
-  namespace InlineLinearDivergenceEnv
-  {
-    extern const std::string name;
-    bool registerAll();
-  }
+namespace Chroma {
+/*! \ingroup inlinehadron */
+namespace InlineLinearDivergenceEnv {
+extern const std::string name;
+bool registerAll();
+}
 
-  //! Parameter structure
-  /*! \ingroup inlinehadron */
-  struct InlineLinearDivergenceParams
-  {
-    InlineLinearDivergenceParams();
-    InlineLinearDivergenceParams(XMLReader& xml_in, const std::string& path);
-    void writeXML(XMLWriter& xml_out, const std::string& path);
+//! Parameter structure
+/*! \ingroup inlinehadron */
+struct InlineLinearDivergenceParams {
+  InlineLinearDivergenceParams();
+  InlineLinearDivergenceParams(XMLReader &xml_in, const std::string &path);
+  void writeXML(XMLWriter &xml_out, const std::string &path);
 
-    unsigned long     frequency;
+  unsigned long frequency;
 
-    multi1d<int> grid;
-    multi1d<int> link_lengths;
-    int nsets;
+  multi1d<int> grid;
+  multi1d<int> link_lengths;
+  int nsets;
 
-    ChromaProp_t      param;
+  ChromaProp_t param;
 
-    GroupXML_t inv_param_h;
-    GroupXML_t inv_param_l;
-    int HL_ratio;
+  GroupXML_t inv_param_h;
+  GroupXML_t inv_param_l;
+  int HL_ratio;
 
-    struct NamedObject_t
-    {
-      std::string     gauge_id;
-    } named_obj;
-    bool use_ckpoint;
+  struct NamedObject_t {
+    std::string gauge_id;
+  } named_obj;
+  bool use_ckpoint;
 
-    std::string xml_file;  // Alternate XML file pattern
-    std::string iog_file;
-    int cfg_serial;
-  };
+  std::string xml_file; // Alternate XML file pattern
+  std::string iog_file;
+  int cfg_serial;
+};
 
-  //! Inline propagator calculation
-  /*! \ingroup inlinehadron */
-  class InlineLinearDivergence : public AbsInlineMeasurement
-  {
-  public:
-    ~InlineLinearDivergence() {}
-    InlineLinearDivergence(const InlineLinearDivergenceParams& p) : params(p) {}
-    InlineLinearDivergence(const InlineLinearDivergence& p) : params(p.params) {}
+//! Inline propagator calculation
+/*! \ingroup inlinehadron */
+class InlineLinearDivergence : public AbsInlineMeasurement {
+public:
+  ~InlineLinearDivergence() {}
+  InlineLinearDivergence(const InlineLinearDivergenceParams &p) : params(p) {}
+  InlineLinearDivergence(const InlineLinearDivergence &p) : params(p.params) {}
 
-    unsigned long getFrequency(void) const {return params.frequency;}
+  unsigned long getFrequency(void) const { return params.frequency; }
 
-    //! Do the measurement
-    void operator()(const unsigned long update_no,
-		    XMLWriter& xml_out);
+  //! Do the measurement
+  void operator()(const unsigned long update_no, XMLWriter &xml_out);
 
-  protected:
-    //! Do the measurement
-    void func(const unsigned long update_no,
-	      XMLWriter& xml_out);
+protected:
+  //! Do the measurement
+  void func(const unsigned long update_no, XMLWriter &xml_out);
 
-  private:
-    InlineLinearDivergenceParams params;
-  };
-
+private:
+  InlineLinearDivergenceParams params;
+};
 }
 
 #endif

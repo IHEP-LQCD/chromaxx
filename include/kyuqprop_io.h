@@ -13,10 +13,10 @@ namespace Chroma {
  *
  * \param q          propagator ( Read )
  * \param file       path ( Read )
- */    
-void writeKYUQprop2(LatticePropagator& q, const std::string& file);
-void readKYUQprop2(LatticePropagator& q, const std::string& file);
+ */
+void writeKYUQprop2(LatticePropagator &q, const std::string &file);
+void readKYUQprop2(LatticePropagator &q, const std::string &file);
 
-}  // end namespace Chroma
+} // end namespace Chroma
 
 #endif

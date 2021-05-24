@@ -10,33 +10,24 @@
 #include "funcmap.h"
 #include "chromabase.h"
 
-namespace Chroma
-{
+namespace Chroma {
 
-  //! Write object function std::map
-  /*! \ingroup inlineio */
-  namespace UKYWriteObjCallMapEnv
-  { 
-    struct DumbDisambiguator {};
+//! Write object function std::map
+/*! \ingroup inlineio */
+namespace UKYWriteObjCallMapEnv {
+struct DumbDisambiguator {};
 
-    //! Write object function std::map
-    /*! \ingroup inlineio */
-    typedef SingletonHolder< 
-      FunctionMap<DumbDisambiguator,
-		  void,
-		  std::string,
-		  TYPELIST_5(const std::string&,
-			     const std::string&, 
-			     int, int, int),
-		  void (*)(const std::string& buffer_id,
-			   const std::string& filename),
-		  StringFunctionMapError> >
-    TheUKYWriteObjFuncMap;
+//! Write object function std::map
+/*! \ingroup inlineio */
+typedef SingletonHolder<FunctionMap<
+    DumbDisambiguator, void, std::string,
+    TYPELIST_5(const std::string &, const std::string &, int, int, int),
+    void (*)(const std::string &buffer_id, const std::string &filename),
+    StringFunctionMapError> > TheUKYWriteObjFuncMap;
 
-    bool registerAll();
-  }
+bool registerAll();
+}
 
 } // end namespace Chroma
-
 
 #endif

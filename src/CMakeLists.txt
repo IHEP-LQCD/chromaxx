@@ -1,3 +1,3 @@
-PROJECT(my_add)
-set(my_add_files register_new.cc inline_cluster_dec.cc inline_tests.cc)
-add_library(my_add ${my_add_files})
+aux_source_directory(. DIR_SRC)
+include_directories(../include)
+add_library(chroma_clqcd ${DIR_SRC})

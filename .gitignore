@@ -1,9 +1,6 @@
 Makefile
 *.o
 chroma
-compile_src/
-register_new.cc
-register_new.h
 generate_register.py
 .vscode/c_cpp_properties.json
 .vscode/

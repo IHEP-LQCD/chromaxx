@@ -10,32 +10,24 @@
 #include "funcmap.h"
 #include "chromabase.h"
 
-namespace Chroma
-{
+namespace Chroma {
 
-  //! Read object function std::map
-  /*! \ingroup inlineio */
-  namespace UKYReadObjCallMapEnv
-  { 
-    struct DumbDisambiguator {};
+//! Read object function std::map
+/*! \ingroup inlineio */
+namespace UKYReadObjCallMapEnv {
+struct DumbDisambiguator {};
 
-    //! Read object function std::map
-    /*! \ingroup inlineio */
-    typedef SingletonHolder< 
-      FunctionMap<DumbDisambiguator,
-		  void,
-		  std::string,
-		  TYPELIST_2(const std::string&,
-			     const std::string&),
-		  void (*)(const std::string& buffer_id,
-			   const std::string& filename),
-		  StringFunctionMapError> >
-    TheUKYReadObjFuncMap;
+//! Read object function std::map
+/*! \ingroup inlineio */
+typedef SingletonHolder<FunctionMap<
+    DumbDisambiguator, void, std::string,
+    TYPELIST_2(const std::string &, const std::string &),
+    void (*)(const std::string &buffer_id, const std::string &filename),
+    StringFunctionMapError> > TheUKYReadObjFuncMap;
 
-    bool registerAll();
-  }
+bool registerAll();
+}
 
 } // end namespace Chroma
-
 
 #endif

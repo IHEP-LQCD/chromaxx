@@ -22,9 +22,9 @@ set(CMAKE_CXX_FLAGS ${CHROMA_CXXFLAGS})
 
 include_directories("./include")
 
-add_subdirectory(compile_src)
+add_subdirectory(src)
 add_executable(chroma_addons chroma.cc register_new.cc)
-target_link_libraries(chroma_addons my_add ${CHROMA_LDFLAGS} ${CHROMA_LIBS})
+target_link_libraries(chroma_addons chroma_clqcd ${CHROMA_LDFLAGS} ${CHROMA_LIBS})
 add_executable(purgauge_addons purgaug.cc register_new.cc)
-target_link_libraries(purgauge_addons my_add ${CHROMA_LDFLAGS} ${CHROMA_LIBS})
+target_link_libraries(purgauge_addons chroma_clqcd ${CHROMA_LDFLAGS} ${CHROMA_LIBS})
 install(TARGETS chroma_addons)

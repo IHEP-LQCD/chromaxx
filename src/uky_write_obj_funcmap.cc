@@ -7,42 +7,34 @@
 #include "uky_write_obj_funcmap.h"
 #include "kyuqprop_io.h"
 
-namespace Chroma
-{
- 
-  //! IO function std::map environment
-  /*! \ingroup inlineio */
-  namespace UKYWriteObjCallMapEnv
-  { 
-    // Anonymous namespace
-    namespace
-    {
-      //! Write a propagator
-      void UKYWriteLatProp(const std::string& buffer_id,
-			    const std::string& file)
-      {
-	LatticePropagator obj = TheNamedObjMap::Instance().getData<LatticePropagator>(buffer_id);
-	writeKYUQprop2(obj, file);
-      }
+namespace Chroma {
 
-      //! Local registration flag
-      bool registered = false;
+//! IO function std::map environment
+/*! \ingroup inlineio */
+namespace UKYWriteObjCallMapEnv {
+// Anonymous namespace
+namespace {
+//! Write a propagator
+void UKYWriteLatProp(const std::string &buffer_id, const std::string &file) {
+  LatticePropagator obj =
+      TheNamedObjMap::Instance().getData<LatticePropagator>(buffer_id);
+  writeKYUQprop2(obj, file);
+}
 
-    }  // end namespace
+//! Local registration flag
+bool registered = false;
 
+} // end namespace
 
-    //! Register all the factories
-    bool registerAll() 
-    {
-      bool success = true; 
-      if (! registered)
-      {
-	success &= TheUKYWriteObjFuncMap::Instance().registerFunction(std::string("LatticePropagator"), 
-								       UKYWriteLatProp);
-	registered = true;
-      }
-      return success;
-    }
+//! Register all the factories
+bool registerAll() {
+  bool success = true;
+  if (!registered) {
+    success &= TheUKYWriteObjFuncMap::Instance().registerFunction(
+        std::string("LatticePropagator"), UKYWriteLatProp);
+    registered = true;
   }
-
+  return success;
+}
+}
 }
