@@ -142,46 +142,47 @@ public:
         coeff_r = param.rect_c_s;
       }
 
+      LatticeColorMatrix tmp1 = shift(u[nu], FORWARD, mu);
+      LatticeColorMatrix tmp2 = shift(u[mu], FORWARD, mu);
+      LatticeColorMatrix tmp3 = shift(u[mu], FORWARD, nu);
       // 1mu 1nu up staple
-      result[rb[cb]] += coeff_p * shift(u[nu], FORWARD, mu) *
-                        adj(shift(u[mu], FORWARD, nu)) * adj(u[nu]);
+      result[rb[cb]] += coeff_p * tmp1 * adj(tmp3) * adj(u[nu]);
 
       // 1mu 1nu down staple
-      result[rb[cb]] +=
-          coeff_p * adj(shift(shift(u[nu], FORWARD, mu), BACKWARD, nu)) *
-          adj(shift(u[mu], BACKWARD, nu)) * shift(u[nu], BACKWARD, nu);
+      result[rb[cb]] += coeff_p * adj(shift(tmp1, BACKWARD, nu)) *
+                        adj(shift(u[mu], BACKWARD, nu)) *
+                        shift(u[nu], BACKWARD, nu);
 
       if (nu == param.aniso.t_dir || ifspace) {
         // 2 mu * 1nu up staple
-        result[rb[cb]] += coeff_r * shift(u[mu], FORWARD, mu) *
-                          shift(shift(u[nu], FORWARD, mu), FORWARD, mu) *
-                          adj(shift(shift(u[mu], FORWARD, mu), FORWARD, nu)) *
-                          adj(shift(u[mu], FORWARD, nu)) * adj(u[nu]);
+        result[rb[cb]] += coeff_r * tmp2 * shift(tmp1, FORWARD, mu) *
+                          adj(shift(tmp2, FORWARD, nu)) * adj(tmp3) *
+                          adj(u[nu]);
 
         // 2 mu * 1nu down staple
-        result[rb[cb]] +=
-            coeff_r * shift(u[mu], FORWARD, mu) *
-            adj(shift(shift(shift(u[nu], FORWARD, mu), FORWARD, mu), BACKWARD,
-                      nu)) *
-            adj(shift(shift(u[mu], FORWARD, mu), BACKWARD, nu)) *
-            adj(shift(u[mu], BACKWARD, nu)) * shift(u[nu], BACKWARD, nu);
+        LatticeColorMatrix tmp4 = shift(tmp1, FORWARD, mu);
+
+        result[rb[cb]] += coeff_r * tmp3 * adj(shift(tmp4, BACKWARD, nu)) *
+                          adj(shift(tmp2, BACKWARD, nu)) *
+                          adj(shift(u[mu], BACKWARD, nu)) *
+                          shift(u[nu], BACKWARD, nu);
       }
 
       if (mu == param.aniso.t_dir || ifspace) {
+        LatticeColorMatrix tmp5 = shift(u[nu], FORWARD, nu);
         // 2 nu * 1mu up staple
-        result[rb[cb]] += coeff_r * shift(u[nu], FORWARD, mu) *
-                          shift(shift(u[nu], FORWARD, mu), FORWARD, nu) *
-                          adj(shift(shift(u[mu], FORWARD, nu), FORWARD, nu)) *
-                          adj(shift(u[nu], FORWARD, nu)) * adj(u[nu]);
+        result[rb[cb]] += coeff_r * tmp1 * shift(tmp1, FORWARD, nu) *
+                          adj(shift(tmp3, FORWARD, nu)) * adj(tmp5) *
+                          adj(u[nu]);
 
+        LatticeColorMatrix tmp6 = shift(tmp1, BACKWARD, nu);
+        LatticeColorMatrix tmp7 = shift(u[mu], BACKWARD, nu);
+        LatticeColorMatrix tmp8 = shift(u[nu], BACKWARD, nu);
         // 2 nu * 1mu down staple
-        result[rb[cb]] +=
-            coeff_r * adj(shift(shift(u[nu], FORWARD, mu), BACKWARD, nu)) *
-            adj(shift(shift(shift(u[nu], FORWARD, mu), BACKWARD, nu), BACKWARD,
-                      nu)) *
-            adj(shift(shift(u[mu], BACKWARD, nu), BACKWARD, nu)) *
-            shift(shift(u[nu], BACKWARD, nu), BACKWARD, nu) *
-            shift(u[nu], BACKWARD, nu);
+        result[rb[cb]] += coeff_r * adj(tmp6) * adj(shift(tmp6, BACKWARD, nu)) *
+                          adj(shift(tmp7, BACKWARD, nu)) *
+                          shift(tmp8, BACKWARD, nu) *
+                          shift(u[nu], BACKWARD, nu);
       }
     }
 

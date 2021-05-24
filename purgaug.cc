@@ -379,7 +379,7 @@ doWarmUp(XMLWriter &xml_out, multi1d<LatticeColorMatrix> &u,
     // add by glc
     // read plaq to us
     if (hb_control.update_us2) {
-	  auto S_g_glc = dynamic_cast<const AnisoSpectrumGaugeAct2&>(S_g);
+      auto S_g_glc = dynamic_cast<const AnisoSpectrumGaugeAct2 &>(S_g);
       S_g_glc.update_coeff(u);
     }
 
