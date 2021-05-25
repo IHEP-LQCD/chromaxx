@@ -10,6 +10,8 @@
 #include "inline_linear_divergence.h"
 #include "inline_uky_write_obj.h"
 #include "aniso_spectrum_gaugeact2.h"
+#include "inline_meson_matelem_colorvec_w.h"
+#include "inline_prop_and_matelem_distillation_w.h"
 
 namespace Chroma {
 void register_new(bool &);

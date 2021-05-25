@@ -358,7 +358,7 @@ doWarmUp(XMLWriter &xml_out, multi1d<LatticeColorMatrix> &u,
   // XML Output
   push(xml_out, "WarmUpdates");
   // add by glc
-  hb_control.update_us2=true;
+  hb_control.update_us2 = true;
   for (int i = 0; i < to_do; i++) {
     push(xml_out, "elem"); // Caller writes elem rule
 
@@ -420,7 +420,7 @@ void doProd(XMLWriter &xml_out, multi1d<LatticeColorMatrix> &u,
   push(xml_out, "MCUpdates");
 
   // add by glc
-  hb_control.update_us2=false;
+  hb_control.update_us2 = false;
   for (int i = 0; i < to_do; i++) {
     push(xml_out, "elem"); // Caller writes elem rule
 
