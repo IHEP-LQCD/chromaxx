@@ -93,26 +93,26 @@ public:
     multi2d<Double> plane_plaq;
     MesPlq(u, w_plaq, s_plaq, t_plaq, plane_plaq, link);
     Real u_s = pow(s_plaq, 0.25);
-    Real u_t = pow(t_plaq, 0.25);
     Real u_s_2 = u_s * u_s;
+    Real u_t = sqrt(t_plaq/u_s_2);
     Real u_s_4 = u_s_2 * u_s_2;
     Real u_t_2 = u_t * u_t;
     Real u_s_6 = u_s_4 * u_s_2;
     param.plaq_c_s = param.beta * Real(5) / (Real(3) * u_s_4);
-    if (param.aniso.anisoP)
-      param.plaq_c_s /= param.aniso.xi_0;
-    param.plaq_c_t = param.beta * Real(4) / (Real(3) * u_s_2 * u_t_2);
-    if (param.aniso.anisoP)
-      param.plaq_c_t *= param.aniso.xi_0;
     // Coefficients for the rectangle
     param.rect_c_s = -param.beta / (Real(12) * u_s_6);
-    if (param.aniso.anisoP)
-      param.rect_c_s /= param.aniso.xi_0;
+
+    param.plaq_c_t = param.beta * Real(4) / (Real(3) * u_s_2 * u_t_2);
     // Loops that are short in the time direction
     param.rect_c_t_2 =
         -param.beta / (Real(12) * u_s_4 * u_t_2) * param.aniso.xi_0;
     if (param.aniso.anisoP)
+    {
+      param.plaq_c_s /= param.aniso.xi_0;
+      param.rect_c_s /= param.aniso.xi_0;
+      param.plaq_c_t *= param.aniso.xi_0;
       param.rect_c_t_2 *= param.aniso.xi_0;
+    }
   }
 
   //! Compute staple
