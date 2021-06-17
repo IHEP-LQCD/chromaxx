@@ -10,6 +10,7 @@
 #include "inline_linear_divergence.h"
 #include "inline_uky_write_obj.h"
 #include "aniso_spectrum_gaugeact2.h"
+#include "inline_building_blocks_w_ihep.h"
 
 namespace Chroma {
 void register_new(bool &);

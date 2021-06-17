@@ -358,7 +358,7 @@ doWarmUp(XMLWriter &xml_out, multi1d<LatticeColorMatrix> &u,
   // XML Output
   push(xml_out, "WarmUpdates");
   // add by glc
-  hb_control.update_us2=true;
+  hb_control.update_us2 = true;
   for (int i = 0; i < to_do; i++) {
     push(xml_out, "elem"); // Caller writes elem rule
 
@@ -372,14 +372,11 @@ doWarmUp(XMLWriter &xml_out, multi1d<LatticeColorMatrix> &u,
 
     // add by glc
     // read plaq to us
-    if (hb_control.update_us2)
-    {
+    if (hb_control.update_us2) {
       auto S_g_glc = dynamic_cast<const AnisoSpectrumGaugeAct2 &>(S_g);
       S_g_glc.update_coeff(u);
       mciter(u, S_g_glc, hb_control.hbitr_params.hb_params); // one hb sweep
-    }
-    else
-    {
+    } else {
       // Do the update, but with no measurements
       mciter(u, S_g, hb_control.hbitr_params.hb_params); // one hb sweep
     }
@@ -424,7 +421,7 @@ void doProd(XMLWriter &xml_out, multi1d<LatticeColorMatrix> &u,
   push(xml_out, "MCUpdates");
 
   // add by glc
-  hb_control.update_us2=false;
+  hb_control.update_us2 = false;
   for (int i = 0; i < to_do; i++) {
     push(xml_out, "elem"); // Caller writes elem rule
 

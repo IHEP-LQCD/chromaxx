@@ -92,13 +92,14 @@ public:
     Double w_plaq, s_plaq, t_plaq, link;
     multi2d<Double> plane_plaq;
     MesPlq(u, w_plaq, s_plaq, t_plaq, plane_plaq, link);
-    Real u_s = pow(s_plaq,0.25);
+    Real u_s = pow(s_plaq, 0.25);
     Real u_s_2 = u_s * u_s;
     Real u_s_4 = u_s_2 * u_s_2;
     Real u_s_6 = u_s_4 * u_s_2;
-    Real u_t = pow(t_plaq / u_s_2 ,0.5);
+    Real u_t = pow(t_plaq / u_s_2, 0.5);
     Real u_t_2 = u_t * u_t;
-    QDPIO::cout << "s_plaq t_plaq u_s u_t are: " << s_plaq<< t_plaq<<u_s<< u_t << std::endl;
+    QDPIO::cout << "s_plaq t_plaq u_s u_t are: " << s_plaq << t_plaq << u_s
+                << u_t << std::endl;
     param.plaq_c_s = param.beta * Real(5) / (Real(3) * u_s_4);
     if (param.aniso.anisoP)
       param.plaq_c_s /= param.aniso.xi_0;
@@ -115,7 +116,9 @@ public:
     if (param.aniso.anisoP)
       param.rect_c_t_2 *= param.aniso.xi_0;
 
-    QDPIO::cout << "plaq_c_s plaq_c_t rect_c_s rect_c_t_2 are: " << param.plaq_c_s<<param.plaq_c_t<<param.rect_c_s<<param.rect_c_t_2 <<std::endl;
+    QDPIO::cout << "plaq_c_s plaq_c_t rect_c_s rect_c_t_2 are: "
+                << param.plaq_c_s << param.plaq_c_t << param.rect_c_s
+                << param.rect_c_t_2 << std::endl;
   }
 
   //! Compute staple
@@ -144,7 +147,8 @@ public:
         coeff_p = param.plaq_c_s;
         coeff_r = param.rect_c_s;
       }
-      QDPIO::cout << "coeff_p and coeff_r are: "<< coeff_p << coeff_r << std::endl;
+      QDPIO::cout << "coeff_p and coeff_r are: " << coeff_p << coeff_r
+                  << std::endl;
 
       LatticeColorMatrix tmp1 = shift(u[nu], FORWARD, mu);
       LatticeColorMatrix tmp2 = shift(u[mu], FORWARD, mu);
