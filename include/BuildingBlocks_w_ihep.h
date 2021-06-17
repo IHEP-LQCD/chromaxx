@@ -50,18 +50,16 @@ typedef void (*BBLinkPattern)(bool &DoThisPattern, bool &DoFurtherPatterns,
 // Construct Building Blocks //
 //###################################################################################//
 
-void
-BuildingBlocks(const multi1d<LatticePropagator> &B, const LatticePropagator &F,
-               const multi1d<LatticeColorMatrix> &U,
-               const multi1d<int> &GammaInsertions, const multi1d<int> &Flavors,
-               const unsigned short int MaxNLinks,
-               const BBLinkPattern LinkPattern, const SftMom &Phases,
-               const SftMom &PhasesCanonical, 
-               XMLWriter& XmlOut, const signed short int T1,
-               const signed short int T2, const signed short int Tsrc,
-               const signed short int Tsnk, const std::string &SeqSourceType,
-               const multi1d<int> &SnkMom, const signed short int DecayDir,
-               const bool TimeReverse, const bool Translate);
+void BuildingBlocks(
+    const multi1d<LatticePropagator> &B, const LatticePropagator &F,
+    const multi1d<LatticeColorMatrix> &U, const multi1d<int> &GammaInsertions,
+    const multi1d<int> &Flavors, const unsigned short int MaxNLinks,
+    const BBLinkPattern LinkPattern, const SftMom &Phases,
+    const SftMom &PhasesCanonical, XMLWriter &XmlOut, const signed short int T1,
+    const signed short int T2, const signed short int Tsrc,
+    const signed short int Tsnk, const std::string &SeqSourceType,
+    const multi1d<int> &SnkMom, const signed short int DecayDir,
+    const bool TimeReverse, const bool Translate);
 
 //###################################################################################//
 // Arguments //

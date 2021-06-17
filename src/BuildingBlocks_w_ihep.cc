@@ -55,11 +55,9 @@ namespace Chroma {
 
 void BkwdFrwdTr(const LatticePropagator &B, const LatticePropagator &F,
                 int GammaInsertion, const SftMom &Phases,
-                const SftMom &PhasesCanonical, 
-                XMLWriter &XmlOut,
-                multi1d<int> &GBB_NLinkPatterns,
-                multi2d<int> &GBB_NMomPerms, const int f,
-                const multi1d<unsigned short int> &LinkDirs,
+                const SftMom &PhasesCanonical, XMLWriter &XmlOut,
+                multi1d<int> &GBB_NLinkPatterns, multi2d<int> &GBB_NMomPerms,
+                const int f, const multi1d<unsigned short int> &LinkDirs,
                 const signed short int T1, const signed short int T2,
                 const signed short int Tsrc, const signed short int Tsnk,
                 const bool TimeReverse, const bool ShiftFlag) {
@@ -109,9 +107,10 @@ void BkwdFrwdTr(const LatticePropagator &B, const LatticePropagator &F,
       // and (7+4)%8=3.
       if ((TimeReverse == true) &
           ((LinkDirs[Link] == 3) || (LinkDirs[Link] == 7))) {
-          QDPIO::cout << "LinkDirs["<<Link<<"]"<<(LinkDirs[ Link] + 4 ) % 8 << "\n";
+        QDPIO::cout << "LinkDirs[" << Link << "]" << (LinkDirs[Link] + 4) % 8
+                    << "\n";
       } else {
-          QDPIO::cout << "LinkDirs["<<Link<<"]"<<LinkDirs[Link]<<"\n";
+        QDPIO::cout << "LinkDirs[" << Link << "]" << LinkDirs[Link] << "\n";
       }
 
 #if _DEBUG_BB_C_ == 1
@@ -174,12 +173,12 @@ void BkwdFrwdTr(const LatticePropagator &B, const LatticePropagator &F,
 
     Timer.reset();
     Timer.start();
-    
+
     push(XmlOut, "momenta");
     for (int q = 0; q < NumQ; q++) {
       multi1d<DComplex> Projection = Projections[q];
       multi1d<int> Q = Phases.numToMom(q);
-      
+
       push(XmlOut, "elem");
       write(XmlOut, "mom_q_num", q);
       write(XmlOut, "mom_q", Q);
@@ -205,7 +204,7 @@ void BkwdFrwdTr(const LatticePropagator &B, const LatticePropagator &F,
         int t_prime = t;
 
         if (TimeReverse == true) {
-          QDPIO::cout<<"TimeReversing: " ;
+          QDPIO::cout << "TimeReversing: ";
           // shift the time origin to the source
           int t_shifted = (t - Tsrc + NT) % NT;
           // time reverse around the source
@@ -290,11 +289,11 @@ void AddLinks(const multi1d<LatticePropagator> &B, const LatticePropagator &F,
               multi1d<unsigned short int> &LinkDirs,
               const unsigned short int MaxNLinks, BBLinkPattern LinkPattern,
               const short int PreviousDir, const short int PreviousMu,
-              XMLWriter &XmlOut,
-              multi1d<int> &GBB_NLinkPatterns, multi2d<int> &GBB_NMomPerms,
-              const signed short int T1, const signed short int T2,
-              const signed short int Tsrc, const signed short int Tsnk,
-              const bool TimeReverse, const bool ShiftFlag) {
+              XMLWriter &XmlOut, multi1d<int> &GBB_NLinkPatterns,
+              multi2d<int> &GBB_NMomPerms, const signed short int T1,
+              const signed short int T2, const signed short int Tsrc,
+              const signed short int Tsnk, const bool TimeReverse,
+              const bool ShiftFlag) {
   StopWatch Timer;
   int ShiftCalls = 0;
   double ShiftTime = 0.0;
@@ -341,8 +340,8 @@ void AddLinks(const multi1d<LatticePropagator> &B, const LatticePropagator &F,
         // form correlation functions
         for (int f = 0; f < NF; f++) {
           BkwdFrwdTr(B[f], F_mu, GammaInsertions[f], Phases, PhasesCanonical,
-                     XmlOut, GBB_NLinkPatterns, GBB_NMomPerms, f,
-                     NextLinkDirs, T1, T2, Tsrc, Tsnk, TimeReverse, ShiftFlag);
+                     XmlOut, GBB_NLinkPatterns, GBB_NMomPerms, f, NextLinkDirs,
+                     T1, T2, Tsrc, Tsnk, TimeReverse, ShiftFlag);
         }
       }
 
@@ -383,8 +382,8 @@ void AddLinks(const multi1d<LatticePropagator> &B, const LatticePropagator &F,
         // form correlation functions
         for (int f = 0; f < NF; f++) {
           BkwdFrwdTr(B[f], F_mu, GammaInsertions[f], Phases, PhasesCanonical,
-                     XmlOut, GBB_NLinkPatterns, GBB_NMomPerms, f,
-                     NextLinkDirs, T1, T2, Tsrc, Tsnk, TimeReverse, ShiftFlag);
+                     XmlOut, GBB_NLinkPatterns, GBB_NMomPerms, f, NextLinkDirs,
+                     T1, T2, Tsrc, Tsnk, TimeReverse, ShiftFlag);
         }
       }
 
@@ -413,8 +412,7 @@ void BuildingBlocks(
     const multi1d<LatticeColorMatrix> &U, const multi1d<int> &GammaInsertions,
     const multi1d<int> &Flavors, const unsigned short int MaxNLinks,
     const BBLinkPattern LinkPattern, const SftMom &Phases,
-    const SftMom &PhasesCanonical, 
-    XMLWriter& XmlOut, const signed short int T1,
+    const SftMom &PhasesCanonical, XMLWriter &XmlOut, const signed short int T1,
     const signed short int T2, const signed short int Tsrc,
     const signed short int Tsnk, const std::string &SeqSourceType,
     const multi1d<int> &SnkMom, const signed short int DecayDir,
@@ -454,9 +452,9 @@ void BuildingBlocks(
   multi1d<unsigned short int> LinkDirs(0);
 
   for (int f = 0; f < NumF; f++) {
-    BkwdFrwdTr(B[f], F, GammaInsertions[f], Phases, PhasesCanonical,
-               XmlOut, GBB_NLinkPatterns, GBB_NMomPerms, f, LinkDirs, T1,
-               T2, Tsrc, Tsnk, TimeReverse, ShiftFlag);
+    BkwdFrwdTr(B[f], F, GammaInsertions[f], Phases, PhasesCanonical, XmlOut,
+               GBB_NLinkPatterns, GBB_NMomPerms, f, LinkDirs, T1, T2, Tsrc,
+               Tsnk, TimeReverse, ShiftFlag);
   }
 
   Timer.stop();
@@ -540,7 +538,6 @@ void BuildingBlocks(
         QDPIO::cout << "PZ              = " << PZ << "\n";
       }
 #endif
-
     }
   }
 

@@ -63,8 +63,10 @@ struct InlineBuildingBlocksIHEPParams {
 class InlineBuildingBlocksIHEP : public AbsInlineMeasurement {
 public:
   ~InlineBuildingBlocksIHEP() {}
-  InlineBuildingBlocksIHEP(const InlineBuildingBlocksIHEPParams &p) : params(p) {}
-  InlineBuildingBlocksIHEP(const InlineBuildingBlocksIHEP &p) : params(p.params) {}
+  InlineBuildingBlocksIHEP(const InlineBuildingBlocksIHEPParams &p)
+      : params(p) {}
+  InlineBuildingBlocksIHEP(const InlineBuildingBlocksIHEP &p)
+      : params(p.params) {}
 
   unsigned long getFrequency(void) const { return params.frequency; }
 

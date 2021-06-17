@@ -22,7 +22,8 @@ namespace InlineBuildingBlocksIHEPEnv {
 namespace {
 AbsInlineMeasurement *createMeasurement(XMLReader &xml_in,
                                         const std::string &path) {
-  return new InlineBuildingBlocksIHEP(InlineBuildingBlocksIHEPParams(xml_in, path));
+  return new InlineBuildingBlocksIHEP(
+      InlineBuildingBlocksIHEPParams(xml_in, path));
 }
 
 //! Local registration flag
@@ -90,8 +91,9 @@ void read(XMLReader &xml, const std::string &path,
     break;
 
   default:
-    QDPIO::cerr << InlineBuildingBlocksIHEPEnv::name << ": input parameter version "
-                << version << " unsupported." << std::endl;
+    QDPIO::cerr << InlineBuildingBlocksIHEPEnv::name
+                << ": input parameter version " << version << " unsupported."
+                << std::endl;
     QDP_abort(1);
   }
 
@@ -163,7 +165,9 @@ void write(XMLWriter &xml, const std::string &path,
 }
 
 // Param stuff
-InlineBuildingBlocksIHEPParams::InlineBuildingBlocksIHEPParams() { frequency = 0; }
+InlineBuildingBlocksIHEPParams::InlineBuildingBlocksIHEPParams() {
+  frequency = 0;
+}
 
 InlineBuildingBlocksIHEPParams::InlineBuildingBlocksIHEPParams(
     XMLReader &xml_in, const std::string &path) {
@@ -194,7 +198,7 @@ InlineBuildingBlocksIHEPParams::InlineBuildingBlocksIHEPParams(
 }
 
 void InlineBuildingBlocksIHEPParams::write(XMLWriter &xml_out,
-                                       const std::string &path) {
+                                           const std::string &path) {
   push(xml_out, path);
 
   Chroma::write(xml_out, "Param", param);
@@ -209,7 +213,7 @@ void InlineBuildingBlocksIHEPParams::write(XMLWriter &xml_out,
 //###################################################################################//
 
 void AllLinkPatternsIHEP(bool &DoThisPattern, bool &DoFurtherPatterns,
-                     multi1d<unsigned short int> &LinkPattern) {
+                         multi1d<unsigned short int> &LinkPattern) {
   DoThisPattern = true;
   DoFurtherPatterns = true;
 
@@ -218,7 +222,7 @@ void AllLinkPatternsIHEP(bool &DoThisPattern, bool &DoFurtherPatterns,
 
 // Function call
 void InlineBuildingBlocksIHEP::operator()(unsigned long update_no,
-                                      XMLWriter &xml_out) {
+                                          XMLWriter &xml_out) {
   // If xml file not empty, then use alternate
   if (params.xml_file != "") {
     std::string xml_file = makeXMLFileName(params.xml_file, update_no);
@@ -236,7 +240,8 @@ void InlineBuildingBlocksIHEP::operator()(unsigned long update_no,
 }
 
 // Function call
-void InlineBuildingBlocksIHEP::func(unsigned long update_no, XMLWriter &XmlOut) {
+void InlineBuildingBlocksIHEP::func(unsigned long update_no,
+                                    XMLWriter &XmlOut) {
   START_CODE();
 
   StopWatch snoop;
@@ -553,7 +558,8 @@ void InlineBuildingBlocksIHEP::func(unsigned long update_no, XMLWriter &XmlOut) 
     else if (params.bb.BkwdProps[loop].Flavor == "T")
       Flavors[0] = 5;
     else {
-      QDPIO::cerr << InlineBuildingBlocksIHEPEnv::name << ": invalid flavor tag = "
+      QDPIO::cerr << InlineBuildingBlocksIHEPEnv::name
+                  << ": invalid flavor tag = "
                   << params.bb.BkwdProps[loop].Flavor
                   << ", should be one of U,D,S,C,T,B" << std::endl;
       QDP_abort(1);
