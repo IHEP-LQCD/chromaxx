@@ -7,12 +7,12 @@ Requirment:
 - For CPU: Chroma (with QDP++)
 Build & Install:
 - setup chroma's environemnt, e.g. `module load lqcd/chroma/double/latest-openmpi` on IHEP's GPU cluster.
-- ```
+ ```
 	mkdir build install && pushd build 
-	cmake -DCMAKE_INSTALL_PREFIX=../install
+	cmake -DCMAKE_INSTALL_PREFIX=../install ..
 	make 
 	make install
-  ```
+ ```
 
 ## Develop
 Create a new branch (e.g. feature, bugfix ...) to develop and test the code and then merge into the **devel** branch.
