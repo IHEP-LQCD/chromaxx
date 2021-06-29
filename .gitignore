@@ -5,4 +5,5 @@ generate_register.py
 .vscode/c_cpp_properties.json
 .vscode/
 build/
+build_*/
 install/
