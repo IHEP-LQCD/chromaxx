@@ -244,15 +244,20 @@ void BkwdFrwdTr(const LatticePropagator &B, const LatticePropagator &F,
 #endif
       }
 
+      multi1d<Double> threeptre(T2 - T1 + 1);
+      multi1d<Double> threeptim(T2 - T1 + 1);
       // Write correlator
       push(XmlOut, "threept");
       for (int t = 0; t < (T2 - T1 + 1); t++) {
-        push(XmlOut, "elem");
-        write(XmlOut, "re", real(threept[t]));
-        write(XmlOut, "im", imag(threept[t]));
-        pop(XmlOut);
+        threeptre[t] = real(threept[t]);
+        threeptim[t] = imag(threept[t]);
       }
+      push(XmlOut, "elem");
+      write(XmlOut, "re", threeptre);
+      write(XmlOut, "im", threeptim);
       pop(XmlOut);
+      pop(XmlOut);
+
       pop(XmlOut);
     }
     pop(XmlOut);
