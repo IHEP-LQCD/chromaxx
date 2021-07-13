@@ -10,7 +10,7 @@ void register_new(bool &foo) {
   foo &= InlineLinearDivergenceEnv::registerAll();
   foo &= InlineUKYWriteNamedObjEnv::registerAll();
   foo &= AnisoSpectrumGaugeActEnv2::registerAll();
-  foo &= testInlinePropAndMatElemDistillationEnv::registerAll();
-  foo &= testInlineMesonMatElemColorVecEnv::registerAll();
+  foo &= InlinePropAndMatElemDistillationIHEPEnv::registerAll();
+  foo &= InlineMesonMatElemColorVecIHEPEnv::registerAll();
 }
 }

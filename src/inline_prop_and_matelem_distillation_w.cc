@@ -78,7 +78,7 @@ multi1d<SubsetVectorWeight_t> readEigVals(const std::string &meta) {
 }
 
 //----------------------------------------------------------------------------
-namespace testInlinePropAndMatElemDistillationEnv {
+namespace InlinePropAndMatElemDistillationIHEPEnv {
 //! Propagator input
 void read(XMLReader &xml, const std::string &path,
           Params::NamedObject_t &input) {
@@ -185,7 +185,7 @@ void write(XMLWriter &xml, const std::string &path, const Params &input) {
 
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
-namespace testInlinePropAndMatElemDistillationEnv {
+namespace InlinePropAndMatElemDistillationIHEPEnv {
 //----------------------------------------------------------------------------
 // Convenience type
 typedef QDP::MapObjectDisk<KeyTimeSliceColorVec_t,
@@ -232,7 +232,7 @@ private:
 //----------------------------------------------------------------------------
 //! Getter
 const SubLatticeColorVectorF &SubEigenMap::getVec(int t_source,
-                                                 int colorvec_src) const {
+                                                  int colorvec_src) const {
   // The key
   KeyTimeSliceColorVec_t src_key(t_source, colorvec_src);
   // If item does not exist, read from original std::map and put in memory
@@ -327,7 +327,7 @@ std::list<KeyPropElementalOperator_t> getSnkKeys(int t_source, int spin_source,
 } // end namespace
 
 //----------------------------------------------------------------------------
-namespace testInlinePropAndMatElemDistillationEnv {
+namespace InlinePropAndMatElemDistillationIHEPEnv {
 namespace {
 AbsInlineMeasurement *createMeasurement(XMLReader &xml_in,
                                         const std::string &path) {
@@ -528,40 +528,6 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
   SubEigenMap sub_eigen_map(eigen_source, decay_dir,
                             params.param.contract.zero_colorvecs);
   QDPIO::cout << "Finished initializing sub-lattice std::map" << std::endl;
-
-  //
-  // DB storage
-  //
-  // BinaryStoreDB<SerialDBKey<KeyPropElementalOperator_t>,
-  //              SerialDBData<ValPropElementalOperator_t> > qdp_db;
-
-  // if (!params.param.contract.zero_colorvecs) {
-  //  // Open the file, and write the meta-data and the binary for this operator
-  //  if (!qdp_db.fileExists(params.named_obj.prop_op_file)) {
-  //    XMLBufferWriter file_xml;
-  //    push(file_xml, "DBMetaData");
-  //    write(file_xml, "id", std::string("propElemOp"));
-  //    write(file_xml, "lattSize", QDP::Layout::lattSize());
-  //    write(file_xml, "decay_dir", params.param.contract.decay_dir);
-  //    proginfo(file_xml); // Print out basic program info
-  //    write(file_xml, "Params", params.param);
-  //    write(file_xml, "Config_info", gauge_xml);
-  //    if (!params.param.contract.zero_colorvecs)
-  //      write(file_xml, "Weights", readEigVals(eigen_meta_data));
-  //    pop(file_xml);
-
-  //    std::string file_str(file_xml.str());
-  //    qdp_db.setMaxUserInfoLen(file_str.size());
-
-  //    qdp_db.open(params.named_obj.prop_op_file, O_RDWR | O_CREAT, 0664);
-
-  //    qdp_db.insertUserdata(file_str);
-  //  } else {
-  //    qdp_db.open(params.named_obj.prop_op_file, O_RDWR, 0664);
-  //  }
-
-  //  QDPIO::cout << "Finished opening peram file" << std::endl;
-  //}
 
   // Total number of iterations
   int ncg_had = 0;
@@ -765,25 +731,20 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
                   peram[*key].mat(colorvec_sink, colorvec_src) =
                       innerProduct(sub_eigen_map.getVec(t_slice, colorvec_sink),
                                    ferm_out(key->spin_snk));
-                  double re = toDouble(real(peram[*key].mat(colorvec_sink, colorvec_src)));
-                  double im = toDouble(imag(peram[*key].mat(colorvec_sink, colorvec_src)));
-                  //std::stringstream ss;
-                  //ss.precision(10);
-                  //ss << peram[*key].mat(colorvec_sink, colorvec_src);
+                  double re = toDouble(
+                      real(peram[*key].mat(colorvec_sink, colorvec_src)));
+                  double im = toDouble(
+                      imag(peram[*key].mat(colorvec_sink, colorvec_src)));
+
                   int spin_snk = key->spin_snk;
                   if ((key->t_slice - key->t_source) < 0) {
-                    //ss >> peram_array[(key->t_slice) + Lt - (key->t_source)]
-                    //                 [spin_snk][spin_source][colorvec_sink]
-                    //                 [colorvec_src];
-                    peram_array[(key->t_slice) + Lt - (key->t_source)]
-                                     [spin_snk][spin_source][colorvec_sink]
-                                     [colorvec_src] = std::complex<double>(re, im);
+                    peram_array[(key->t_slice) + Lt - (key->t_source)][spin_snk]
+                               [spin_source][colorvec_sink][colorvec_src] =
+                                   std::complex<double>(re, im);
                   } else {
-                    //ss >>
-                    //    peram_array[(key->t_slice) - (key->t_source)][spin_snk]
-                    //               [spin_source][colorvec_sink][colorvec_src];
                     peram_array[(key->t_slice) - (key->t_source)][spin_snk]
-                              [spin_source][colorvec_sink][colorvec_src] = std::complex<double>(re, im);
+                               [spin_source][colorvec_sink][colorvec_src] =
+                                   std::complex<double>(re, im);
                   }
                 } // for colorvec_sink
               }   // for key
@@ -849,22 +810,13 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
                         real(peram[*key].mat(colorvec_sink, colorvec_src)));
                     double im = toDouble(
                         imag(peram[*key].mat(colorvec_sink, colorvec_src)));
-                    // std::stringstream ss;
-                    // ss.precision(10);
-                    // ss << peram[*key].mat(colorvec_sink, colorvec_src);
+
                     int spin_snk = key->spin_snk;
                     if ((key->t_slice - key->t_source) < 0) {
-                      // ss >> peram_array[(key->t_slice) + Lt -
-                      // (key->t_source)]
-                      //                 [spin_snk][spin_source][colorvec_sink]
-                      //                 [colorvec_src];
                       peram_array[(key->t_slice) + Lt - (key->t_source)]
                                  [spin_snk][spin_source][colorvec_sink]
                                  [colorvec_src] = std::complex<double>(re, im);
                     } else {
-                      // ss >> peram_array[(key->t_slice) - (key->t_source)]
-                      //                 [spin_snk][spin_source][colorvec_sink]
-                      //                 [colorvec_src];
                       peram_array[(key->t_slice) - (key->t_source)][spin_snk]
                                  [spin_source][colorvec_sink][colorvec_src] =
                                      std::complex<double>(re, im);
@@ -906,22 +858,12 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
                         real(peram[*key].mat(colorvec_sink, colorvec_src)));
                     double im = toDouble(
                         imag(peram[*key].mat(colorvec_sink, colorvec_src)));
-                    // std::stringstream ss;
-                    // ss.precision(10);
-                    // ss << peram[*key].mat(colorvec_sink, colorvec_src);
                     int spin_snk = key->spin_snk;
                     if ((key->t_slice - key->t_source) < 0) {
-                      // ss >> peram_array[(key->t_slice) + Lt -
-                      // (key->t_source)]
-                      //                 [spin_snk][spin_source][colorvec_sink]
-                      //                 [colorvec_src];
                       peram_array[(key->t_slice) + Lt - (key->t_source)]
                                  [spin_snk][spin_source][colorvec_sink]
                                  [colorvec_src] = std::complex<double>(re, im);
                     } else {
-                      // ss >> peram_array[(key->t_slice) - (key->t_source)]
-                      //                 [spin_snk][spin_source][colorvec_sink]
-                      //                 [colorvec_src];
                       peram_array[(key->t_slice) - (key->t_source)][spin_snk]
                                  [spin_source][colorvec_sink][colorvec_src] =
                                      std::complex<double>(re, im);
@@ -951,14 +893,6 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
             StopWatch sniss2;
             sniss2.reset();
             sniss2.start();
-
-            // The perambulator is complete. Write it.
-            // for (std::list<KeyPropElementalOperator_t>::const_iterator key =
-            //         snk_keys.begin();
-            //     key != snk_keys.end(); ++key) {
-            //  // Insert/write to disk
-            //  qdp_db.insert(*key, peram[*key]);
-            //} // for key
 
             sniss2.stop();
             QDPIO::cout << "Time to write perambulators for spin_src= "

@@ -33,10 +33,10 @@ namespace Chroma {
  *
  * @{
  */
-namespace testInlineMesonMatElemColorVecEnv {
+namespace InlineMesonMatElemColorVecIHEPEnv {
 // Reader for input parameters
 void read(XMLReader &xml, const std::string &path,
-          testInlineMesonMatElemColorVecEnv::Params::Param_t &param) {
+          InlineMesonMatElemColorVecIHEPEnv::Params::Param_t &param) {
   XMLReader paramtop(xml, path);
 
   int version;
@@ -82,7 +82,7 @@ void read(XMLReader &xml, const std::string &path,
 
 // Writer for input parameters
 void write(XMLWriter &xml, const std::string &path,
-           const testInlineMesonMatElemColorVecEnv::Params::Param_t &param) {
+           const InlineMesonMatElemColorVecIHEPEnv::Params::Param_t &param) {
   push(xml, path);
 
   int version = 3;
@@ -103,7 +103,7 @@ void write(XMLWriter &xml, const std::string &path,
 
 //! Read named objects
 void read(XMLReader &xml, const std::string &path,
-          testInlineMesonMatElemColorVecEnv::Params::NamedObject_t &input) {
+          InlineMesonMatElemColorVecIHEPEnv::Params::NamedObject_t &input) {
   XMLReader inputtop(xml, path);
 
   read(inputtop, "gauge_id", input.gauge_id);
@@ -114,7 +114,7 @@ void read(XMLReader &xml, const std::string &path,
 //! Write named objects
 void
 write(XMLWriter &xml, const std::string &path,
-      const testInlineMesonMatElemColorVecEnv::Params::NamedObject_t &input) {
+      const InlineMesonMatElemColorVecIHEPEnv::Params::NamedObject_t &input) {
   push(xml, path);
 
   write(xml, "gauge_id", input.gauge_id);
@@ -126,12 +126,12 @@ write(XMLWriter &xml, const std::string &path,
 
 // Writer for input parameters
 void write(XMLWriter &xml, const std::string &path,
-           const testInlineMesonMatElemColorVecEnv::Params &param) {
+           const InlineMesonMatElemColorVecIHEPEnv::Params &param) {
   param.writeXML(xml, path);
 }
 }
 
-namespace testInlineMesonMatElemColorVecEnv {
+namespace InlineMesonMatElemColorVecIHEPEnv {
 // Anonymous namespace for registration
 namespace {
 AbsInlineMeasurement *createMeasurement(XMLReader &xml_in,
@@ -391,12 +391,12 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
   const multi1d<LatticeColorMatrix> &u =
       TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix> >(
           params.named_obj.gauge_id);
-
-  /*     const MapObject<int,EVPair<LatticeColorVector> >& eigen_source =
-         *(TheNamedObjMap::Instance().getData< Handle<
-    *MapObject<int,EVPair<LatticeColorVector> > >
-    *>(params.named_obj.colorvec_id));
- */
+  /*
+        const MapObject<int,EVPair<LatticeColorVector> >& eigen_source =
+           *(TheNamedObjMap::Instance().getData< Handle<
+      *MapObject<int,EVPair<LatticeColorVector> > >
+      *>(params.named_obj.colorvec_id));
+   */
   multi1d<LatticeColorVector> eigen_source = RH_qcd::read_dist_vec(
       params.named_obj.colorvec_id, Layout::lattSize()[params.param.decay_dir],
       params.param.num_vecs);
@@ -476,39 +476,6 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
   // Record the smeared observables
   MesPlq(xml_out, "Smeared_Observables", u_smr);
 
-  //
-  // DB storage
-  //
-  // BinaryStoreDB<SerialDBKey<KeyMesonElementalOperator_t>,
-  //              SerialDBData<ValMesonElementalOperator_t> > qdp_db;
-
-  //// Open the file, and write the meta-data and the binary for this operator
-  // if (!qdp_db.fileExists(params.named_obj.meson_op_file)) {
-  //  XMLBufferWriter file_xml;
-
-  //  push(file_xml, "DBMetaData");
-  //  write(file_xml, "id", std::string("mesonElemOp"));
-  //  write(file_xml, "lattSize", QDP::Layout::lattSize());
-  //  //	write(file_xml, "blockSize", params.param.block_size);
-  //  write(file_xml, "decay_dir", params.param.decay_dir);
-  //  proginfo(file_xml); // Print out basic program info
-  //  write(file_xml, "Params", params.param);
-  //  write(file_xml, "Op_Info", params.param.displacement_list);
-  //  write(file_xml, "Config_info", gauge_xml);
-  //  // write(file_xml, "Weights", getEigenValues(eigen_source,
-  //  // params.param.num_vecs));
-  //  pop(file_xml);
-
-  //  std::string file_str(file_xml.str());
-  //  qdp_db.setMaxUserInfoLen(file_str.size());
-
-  //  qdp_db.open(params.named_obj.meson_op_file, O_RDWR | O_CREAT, 0664);
-
-  //  qdp_db.insertUserdata(file_str);
-  //} else {
-  //  qdp_db.open(params.named_obj.meson_op_file, O_RDWR, 0664);
-  //}
- 
   FILE *fp;
   if (Layout::primaryNode()) {
     fp = fopen(params.named_obj.meson_op_file.c_str(), "w");
@@ -579,35 +546,18 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
 
       for (int j = 0; j < params.param.num_vecs; ++j) {
         // Displace the right std::vector and multiply by the momentum phase
-        // EVPair<LatticeColorVector> tmpvec; eigen_source.get(j,tmpvec);
 
         LatticeColorVector shift_vec =
             phases[mom_num] * rightNabla(u_smr, eigen_source[j],
                                          params.param.displacement_length,
                                          disp);
 
-        /*	LatticeColorVector
-           shift_vec=phases[mom_num]*displace(u_smr,tmpvec.eigenVector,
-                params.param.displacement_length,
-                disp);
-        */
-        //	      EVPair<LatticeColorVector> tmpvec1;
-        // eigen_source.get(j,tmpvec1);
         for (int i = 0; i < params.param.num_vecs; ++i) {
           watch.reset();
           watch.start();
 
           // Contract over color indices
           // Do the relevant quark contraction
-          // EVPair<LatticeColorVector> tmpvec; eigen_source.get(i,tmpvec);
-          // LatticeColorVector shift_vec_bk = phases[mom_num] *
-          // rightNabla(u_smr,
-          //                                                            tmpvec.eigenVector,
-          //                                                           params.param.displacement_length,
-          //                                                          disp);
-
-          // LatticeComplex lop = 0.5*(localInnerProduct(tmpvec.eigenVector,
-          // shift_vec)-localInnerProduct(shift_vec_bk,tmpvec1.eigenVector));
 
           LatticeComplex lop = localInnerProduct(eigen_source[i], shift_vec);
           // Slow fourier-transform
@@ -618,27 +568,17 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
             double re = toDouble(real(op_sum[t]));
             double im = toDouble(imag(op_sum[t]));
             vector_products[t][i][j] = std::complex<double>(re, im);
-            // buf[t].val.data().op(i, j) = op_sum[t];
-            // std::stringstream ss;
-            // ss.precision(15);
-            // ss << op_sum[t];
-            // ss >> vector_products[l][t][i][j];
-            // QDPIO::cout<<"INNERPRODUCT " <<op_sum[t]<<std::endl;
           }
 
-          //	      write(xml_out, "elem", key.key());  // debugging
         } // end for j
       }   // end for i
 
       QDPIO::cout << "insert: mom= " << phases.numToMom(mom_num)
                   << " displacement= " << disp << std::endl;
-      //for (int t = 0; t < phases.numSubsets(); ++t) {
-      //  qdp_db.insert(buf[t].key, buf[t].val);
-      //}
-  	if (Layout::primaryNode()) {
-  	  fwrite(vector_products, sizeof(vector_products), 1, fp);
-	//  fflush(fp);
-  	}
+      if (Layout::primaryNode()) {
+        fwrite(vector_products, sizeof(vector_products), 1, fp);
+        //  fflush(fp);
+      }
 
     } // mom_num
 

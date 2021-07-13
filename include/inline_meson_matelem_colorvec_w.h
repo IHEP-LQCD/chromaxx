@@ -12,7 +12,7 @@
 #include "chroma_config.h"
 namespace Chroma {
 /*! \ingroup inlinehadron */
-namespace testInlineMesonMatElemColorVecEnv {
+namespace InlineMesonMatElemColorVecIHEPEnv {
 bool registerAll();
 
 //! Parameter structure

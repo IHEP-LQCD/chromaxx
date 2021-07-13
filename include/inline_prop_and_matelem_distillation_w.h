@@ -18,7 +18,7 @@
 
 namespace Chroma {
 /*! \ingroup inlinehadron */
-namespace testInlinePropAndMatElemDistillationEnv {
+namespace InlinePropAndMatElemDistillationIHEPEnv {
 bool registerAll();
 
 //! Parameter structure
