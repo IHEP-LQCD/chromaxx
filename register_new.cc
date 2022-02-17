@@ -11,5 +11,7 @@ void register_new(bool &foo) {
   foo &= InlineUKYWriteNamedObjEnv::registerAll();
   foo &= AnisoSpectrumGaugeActEnv2::registerAll();
   foo &= InlineBuildingBlocksIHEPEnv::registerAll();
+  foo &= InlinePropAndMatElemDistillationIHEPEnv::registerAll();
+  foo &= InlineMesonMatElemColorVecIHEPEnv::registerAll();
 }
 }
