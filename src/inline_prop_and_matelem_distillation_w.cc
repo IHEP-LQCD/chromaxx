@@ -43,7 +43,7 @@
 #ifndef QDP_IS_QDPJIT_NO_NVPTX
 
 #ifdef BUILD_JIT_CONTRACTION_KERNELS
-#include "custom_kernels/custom_kernels.h"
+#include "custom_kernels.h"
 #endif
 
 namespace Chroma {
