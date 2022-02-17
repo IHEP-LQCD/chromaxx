@@ -26,7 +26,9 @@ add_executable(chromaxx chroma.cc register_new.cc)
 target_link_libraries(chromaxx chromaxx_clqcd ${CHROMA_LDFLAGS} ${CHROMA_LIBS})
 add_executable(purgaugexx purgaug.cc register_new.cc)
 target_link_libraries(purgaugexx chromaxx_clqcd ${CHROMA_LDFLAGS} ${CHROMA_LIBS})
-install(TARGETS chromaxx purgaugexx chromaxx_clqcd
+add_executable(hmcxx hmc.cc register_new.cc)
+target_link_libraries(hmcxx chromaxx_clqcd ${CHROMA_LDFLAGS} ${CHROMA_LIBS})
+install(TARGETS chromaxx purgaugexx hmcxx chromaxx_clqcd
 		RUNTIME DESTINATION bin
 		LIBRARY DESTINATION lib
 		ARCHIVE DESTINATION lib)
