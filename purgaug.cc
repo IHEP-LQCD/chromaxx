@@ -71,6 +71,7 @@ struct MCControl {
   unsigned int save_interval;
   std::string save_prefix;
   QDP_volfmt_t save_volfmt;
+  QDP_serialparallel_t save_pario;
 };
 
 void read(XMLReader &xml, const std::string &path, MCControl &p) {
@@ -84,6 +85,21 @@ void read(XMLReader &xml, const std::string &path, MCControl &p) {
     read(paramtop, "./SaveInterval", p.save_interval);
     read(paramtop, "./SavePrefix", p.save_prefix);
     read(paramtop, "./SaveVolfmt", p.save_volfmt);
+
+    bool parioP = Layout::isIOGridDefined() && (Layout::numIONodeGrid() > 1);
+    if(paramtop.count("./ParallelIO") > 0){
+      read(paramtop, "./ParallelIO", parioP);
+    }else{
+      parioP = false;
+    }
+
+    if(parioP){
+      QDPIO::cout << "Setting parallel write mode for saving configurations" << std::endl;
+      p.save_pario = QDPIO_PARALLEL;
+    }else{
+      QDPIO::cout << "Setting serial write mode for saving configurations" << std::endl;
+      p.save_pario = QDPIO_SERIAL;
+    }
 
     if (p.n_updates_this_run % p.save_interval != 0)
       throw std::string("UpdateThisRun not a multiple of SaveInterval");
@@ -105,6 +121,8 @@ void write(XMLWriter &xml, const std::string &path, const MCControl &p) {
   write(xml, "SaveInterval", p.save_interval);
   write(xml, "SavePrefix", p.save_prefix);
   write(xml, "SaveVolfmt", p.save_volfmt);
+  bool pario = (p.save_pario == QDPIO_PARALLEL);
+  write(xml, "ParallelIO", pario);
 
   pop(xml);
 }
@@ -271,7 +289,7 @@ void saveState(const HBItrParams &update_params, MCControl &mc_control,
 
     // Save the config
     writeGauge(file_xml, config_xml, u, restart_config_filename.str(),
-               mc_new.save_volfmt, QDPIO_SERIAL);
+               mc_new.save_volfmt, mc_new.save_pario);
   }
 
   END_CODE();
@@ -373,9 +391,15 @@ doWarmUp(XMLWriter &xml_out, multi1d<LatticeColorMatrix> &u,
     // add by glc
     // read plaq to us
     if (hb_control.update_us2) {
-      auto S_g_glc = dynamic_cast<const AnisoSpectrumGaugeAct2 &>(S_g);
-      S_g_glc.update_coeff(u);
-      mciter(u, S_g_glc, hb_control.hbitr_params.hb_params); // one hb sweep
+      try {
+        auto S_g_glc = dynamic_cast<const AnisoSpectrumGaugeAct2 &>(S_g);
+        S_g_glc.update_coeff(u);
+        mciter(u, S_g_glc, hb_control.hbitr_params.hb_params); // one hb sweep
+      }
+      catch (std::bad_cast) {
+        QDPIO::cerr << "ERROR: cannot cast gauge action" << std::endl;
+        QDP_abort(1);
+      }
     } else {
       // Do the update, but with no measurements
       mciter(u, S_g, hb_control.hbitr_params.hb_params); // one hb sweep
