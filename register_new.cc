@@ -13,6 +13,7 @@ void register_new(bool &foo) {
   foo &= InlineBuildingBlocksIHEPEnv::registerAll();
   foo &= InlinePropAndMatElemDistillationIHEPEnv::registerAll();
   foo &= InlineMesonMatElemColorVecIHEPEnv::registerAll();
+  foo &= InlineMesonMatElemColorVecDisplaceIHEPEnv::registerAll();
   foo &= FixedGaugeBCEnv::registerAll();
 }
 }

@@ -12,6 +12,7 @@
 #include "aniso_spectrum_gaugeact2.h"
 #include "inline_building_blocks_w_ihep.h"
 #include "inline_meson_matelem_colorvec_w.h"
+#include "inline_meson_matelem_colorvec_displace_w.h"
 #include "inline_prop_and_matelem_distillation_w.h"
 #include "fixed_gaugebc.h"
 
