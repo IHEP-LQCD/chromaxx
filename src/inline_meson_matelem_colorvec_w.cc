@@ -21,7 +21,7 @@
 #include "meas/inline/make_xml_file.h"
 
 #include "meas/inline/io/named_objmap.h"
-#include "IO_dist.h"
+#include "io_dist.h"
 #define COLORVEC_MATELEM_TYPE_ZERO 0
 #define COLORVEC_MATELEM_TYPE_ONE 1
 #define COLORVEC_MATELEM_TYPE_MONE -1
@@ -397,7 +397,7 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
       *MapObject<int,EVPair<LatticeColorVector> > >
       *>(params.named_obj.colorvec_id));
    */
-  multi1d<LatticeColorVector> eigen_source = RH_qcd::read_dist_vec(
+  multi1d<LatticeColorVector> eigen_source = IHEP::read_dist_vec(
       params.named_obj.colorvec_id, Layout::lattSize()[params.param.decay_dir],
       params.param.num_vecs);
   // Sanity check

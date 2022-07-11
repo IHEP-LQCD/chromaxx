@@ -7,7 +7,7 @@
 
 #include "qdp_map_obj_disk.h"
 
-namespace RH_qcd {
+namespace IHEP {
 using namespace QDP;
 
 //----------------------------------------------------------------------------
@@ -20,23 +20,23 @@ struct KeyTimeSliceColorVec_t {
 
 //----------------------------------------------------------------------------
 //! Diagnostics
-StandardOutputStream &operator<<(StandardOutputStream &os,
-                                 const KeyTimeSliceColorVec_t &param);
+static StandardOutputStream &operator<<(StandardOutputStream &os,
+                                        const KeyTimeSliceColorVec_t &param);
 
 //----------------------------------------------------------------------------
 //! KeyTimeSliceColorVec read
-void read(BinaryReader &bin, KeyTimeSliceColorVec_t &param);
+static void read(BinaryReader &bin, KeyTimeSliceColorVec_t &param);
 
 //! KeyTimeSliceColorVec write
-void write(BinaryWriter &bin, const KeyTimeSliceColorVec_t &param);
+static void write(BinaryWriter &bin, const KeyTimeSliceColorVec_t &param);
 
 //! KeyTimeSliceColorVec reader
-void read(XMLReader &xml, const std::string &path,
-          KeyTimeSliceColorVec_t &param);
+static void read(XMLReader &xml, const std::string &path,
+                 KeyTimeSliceColorVec_t &param);
 
 //! KeyTimeSliceColorVec writer
-void write(XMLWriter &xml, const std::string &path,
-           const KeyTimeSliceColorVec_t &param);
+static void write(XMLWriter &xml, const std::string &path,
+                  const KeyTimeSliceColorVec_t &param);
 
 //----------------------------------------------------------------------------
 //! Diagnostics

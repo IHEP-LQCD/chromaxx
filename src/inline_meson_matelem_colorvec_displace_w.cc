@@ -21,7 +21,7 @@
 #include "meas/inline/make_xml_file.h"
 
 #include "meas/inline/io/named_objmap.h"
-#include "IO_dist.h"
+#include "io_dist.h"
 #define COLORVEC_MATELEM_TYPE_ZERO 0
 #define COLORVEC_MATELEM_TYPE_ONE 1
 #define COLORVEC_MATELEM_TYPE_MONE -1
@@ -71,9 +71,12 @@ void read(XMLReader &xml, const std::string &path,
 
   read(paramtop, "mom2_max", param.mom2_max);
   read(paramtop, "displacement_list", param.displacement_list);
-  for(int i=0; i<param.displacement_list.size(); ++i){
-    if(param.displacement_list[i].size() != 2 && param.displacement_list[i].size() != 0){
-      QDPIO::cout << "the displacement list should be length 2 (or 0), where the first is direction and the second is length" << std::endl;
+  for (int i = 0; i < param.displacement_list.size(); ++i) {
+    if (param.displacement_list[i].size() != 2 &&
+        param.displacement_list[i].size() != 0) {
+      QDPIO::cout << "the displacement list should be length 2 (or 0), where "
+                     "the first is direction and the second is length"
+                  << std::endl;
       QDP_abort(1);
     }
   }
@@ -85,8 +88,9 @@ void read(XMLReader &xml, const std::string &path,
 }
 
 // Writer for input parameters
-void write(XMLWriter &xml, const std::string &path,
-           const InlineMesonMatElemColorVecDisplaceIHEPEnv::Params::Param_t &param) {
+void
+write(XMLWriter &xml, const std::string &path,
+      const InlineMesonMatElemColorVecDisplaceIHEPEnv::Params::Param_t &param) {
   push(xml, path);
 
   int version = 3;
@@ -104,8 +108,9 @@ void write(XMLWriter &xml, const std::string &path,
 }
 
 //! Read named objects
-void read(XMLReader &xml, const std::string &path,
-          InlineMesonMatElemColorVecDisplaceIHEPEnv::Params::NamedObject_t &input) {
+void
+read(XMLReader &xml, const std::string &path,
+     InlineMesonMatElemColorVecDisplaceIHEPEnv::Params::NamedObject_t &input) {
   XMLReader inputtop(xml, path);
 
   read(inputtop, "gauge_id", input.gauge_id);
@@ -116,7 +121,8 @@ void read(XMLReader &xml, const std::string &path,
 //! Write named objects
 void
 write(XMLWriter &xml, const std::string &path,
-      const InlineMesonMatElemColorVecDisplaceIHEPEnv::Params::NamedObject_t &input) {
+      const InlineMesonMatElemColorVecDisplaceIHEPEnv::Params::NamedObject_t &
+          input) {
   push(xml, path);
 
   write(xml, "gauge_id", input.gauge_id);
@@ -393,7 +399,7 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
   const multi1d<LatticeColorMatrix> &u =
       TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix> >(
           params.named_obj.gauge_id);
-  multi1d<LatticeColorVector> eigen_source = RH_qcd::read_dist_vec(
+  multi1d<LatticeColorVector> eigen_source = IHEP::read_dist_vec(
       params.named_obj.colorvec_id, Layout::lattSize()[params.param.decay_dir],
       params.param.num_vecs);
   // Sanity check
@@ -511,10 +517,10 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
     int disp_dir;
     int disp_length;
 
-    if (disp.size() == 0){
+    if (disp.size() == 0) {
       disp_dir = 0;
       disp_length = 0;
-    }else{
+    } else {
       disp_dir = params.param.displacement_list[l][0] - 1;
       disp_length = params.param.displacement_list[l][1];
     }
@@ -553,7 +559,8 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
         // Displace the right std::vector and multiply by the momentum phase
 
         LatticeColorVector shift_vec =
-            phases[mom_num] * displace(u_smr, eigen_source[j], disp_length, disp_dir);
+            phases[mom_num] *
+            displace(u_smr, eigen_source[j], disp_length, disp_dir);
 
         for (int i = 0; i < params.param.num_vecs; ++i) {
           watch.reset();

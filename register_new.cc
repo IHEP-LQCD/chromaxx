@@ -15,5 +15,6 @@ void register_new(bool &foo) {
   foo &= InlineMesonMatElemColorVecIHEPEnv::registerAll();
   foo &= InlineMesonMatElemColorVecDisplaceIHEPEnv::registerAll();
   foo &= FixedGaugeBCEnv::registerAll();
+  foo &= DerivQuarkDisplacementEnv::IHEP::registerAll();
 }
 }

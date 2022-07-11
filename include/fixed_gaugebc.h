@@ -55,7 +55,7 @@ public:
     LatticeBoolean mask_m = false;
     for (int m = 0; m < Nd; ++m) {
       LatticeInteger coord_m = Layout::latticeCoordinate(m);
-      
+
       mask_m |= (coord_m == 0);
       mask_m |= (coord_m == (QDP::Layout::lattSize()[m] - 1));
       switch (maxlink) {
@@ -70,7 +70,6 @@ public:
       default:
         QDP_error_exit("FixedGaugeBC: unsupported maxlink = %d\n", maxlink);
       }
-
     }
 
     for (int m = 0; m < Nd; ++m) {

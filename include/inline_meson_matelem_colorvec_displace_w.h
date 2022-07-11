@@ -28,9 +28,10 @@ struct Params {
     int mom2_min;                    /*!< (mom)^2 >= mom2_min */
     int mom2_max;                    /*!< (mom)^2 <= mom2_max */
     multi1d<multi1d<int> > mom_list; /*!< Array of momenta to generate */
-    multi1d<multi1d<int>> displacement_list; /* displacement, 0 is direction, 1 is length */
-    int num_vecs;        /*!< Number of color vectors to use */
-    int decay_dir;       /*!< Decay direction */
+    multi1d<multi1d<int> >
+    displacement_list;        /* displacement, 0 is direction, 1 is length */
+    int num_vecs;             /*!< Number of color vectors to use */
+    int decay_dir;            /*!< Decay direction */
     GroupXML_t link_smearing; /*!< link smearing xml */
   };
 

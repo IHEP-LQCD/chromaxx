@@ -15,6 +15,7 @@
 #include "inline_meson_matelem_colorvec_displace_w.h"
 #include "inline_prop_and_matelem_distillation_w.h"
 #include "fixed_gaugebc.h"
+#include "deriv_quark_displacement_w_ihep.h"
 
 namespace Chroma {
 void register_new(bool &);
