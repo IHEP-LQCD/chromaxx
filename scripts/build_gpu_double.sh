@@ -5,7 +5,7 @@ module load lqcd/gpu/chroma/double-cuda11-qdpjit
 #module load swlqcd/gpu/chroma/double-cuda11-qdpjit-llvm13
 module load lqcd/gpu/cmake/3.20.0
 
-source_dir="$(pwd)"
+source_dir="$(pwd)/../"
 build_dir="$(pwd)/build/gpu_double"
 install_dir="$(pwd)/install/gpu_double"
 

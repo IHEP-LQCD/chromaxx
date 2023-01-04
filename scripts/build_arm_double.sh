@@ -4,7 +4,7 @@ set -e
 module load lqcd/arm/chroma/double-qopqdp-qdpxx
 module load lqcd/arm/cmake/3.20.0
 
-source_dir="$(pwd)"
+source_dir="$(pwd)/../"
 build_dir="$(pwd)/build/arm_double"
 install_dir="$(pwd)/install/arm_double"
 
