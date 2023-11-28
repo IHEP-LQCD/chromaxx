@@ -7,3 +7,4 @@ generate_register.py
 build/
 build_*/
 install/
+test/
