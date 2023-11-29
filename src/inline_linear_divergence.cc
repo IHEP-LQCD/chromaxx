@@ -319,7 +319,7 @@ void InlineLinearDivergence::func(unsigned long update_no, XMLWriter &xml_out) {
     if (Layout::primaryNode()) {
       for (int it = 0; it < Layout::lattSize()[3]; it++)
         printf("srcNROM:%4d%13.5f\n", it,
-               source_corr[it].elem().elem().elem().real());
+               source_corr[it].elem().elem().elem().real().elem());
       fflush(stdout);
     }
   }
