@@ -1,11 +1,11 @@
 
+#include "io_general.h"
 #include <stdlib.h>
 #include <string.h>
-#include "io_general.h"
 
 #ifdef MPIIO // if in the milc MPI environment
-#include "lattice.h"
 #include "io_utils.h"
+#include "lattice.h"
 #include "make_source.h"
 #endif
 
@@ -14,22 +14,74 @@
 #define BIG_ENDIAN __BIG_ENDIAN
 #endif
 
-char *xqcd_type_dim_desc[N_MAX_DIMENSION_TYPES] = {
-  "other",      "x",          "y",            "z",          "t",
-  "d",          "c",          "d2",           "c2",         "complex",
-  "mass",       "smear",      "displacement", "s_01",       "s_02",
-  "s_03",       "s_11",       "s_12",         "s_13",       "d_01",
-  "d_02",       "d_03",       "d_11",         "d_12",       "d_13",
-  "conf",       "operator",   "momentum",     "direction",  "t2",
-  "mass2",      "column",     "row",          "temporary",  "temporary2",
-  "temporary3", "temporary4", "errorbar",     "operator2",  "param",
-  "fit_left",   "fit_right",  "jackknife",    "jackknife2", "jackknife3",
-  "jackknife4", "summary",    "channel",      "channel2",   "eigen",
-  "d_row",      "d_col",      "c_row",        "c_col",      "parity",
-  "noise",      "evenodd",    "disp_x",       "disp_y",     "disp_z",
-  "disp_t",     "t3",         "t4",           "t_source",   "t_current",
-  "t_sink",     "bootstrap",  "nothing"
-};
+char *xqcd_type_dim_desc[N_MAX_DIMENSION_TYPES] = {"other",
+                                                   "x",
+                                                   "y",
+                                                   "z",
+                                                   "t",
+                                                   "d",
+                                                   "c",
+                                                   "d2",
+                                                   "c2",
+                                                   "complex",
+                                                   "mass",
+                                                   "smear",
+                                                   "displacement",
+                                                   "s_01",
+                                                   "s_02",
+                                                   "s_03",
+                                                   "s_11",
+                                                   "s_12",
+                                                   "s_13",
+                                                   "d_01",
+                                                   "d_02",
+                                                   "d_03",
+                                                   "d_11",
+                                                   "d_12",
+                                                   "d_13",
+                                                   "conf",
+                                                   "operator",
+                                                   "momentum",
+                                                   "direction",
+                                                   "t2",
+                                                   "mass2",
+                                                   "column",
+                                                   "row",
+                                                   "temporary",
+                                                   "temporary2",
+                                                   "temporary3",
+                                                   "temporary4",
+                                                   "errorbar",
+                                                   "operator2",
+                                                   "param",
+                                                   "fit_left",
+                                                   "fit_right",
+                                                   "jackknife",
+                                                   "jackknife2",
+                                                   "jackknife3",
+                                                   "jackknife4",
+                                                   "summary",
+                                                   "channel",
+                                                   "channel2",
+                                                   "eigen",
+                                                   "d_row",
+                                                   "d_col",
+                                                   "c_row",
+                                                   "c_col",
+                                                   "parity",
+                                                   "noise",
+                                                   "evenodd",
+                                                   "disp_x",
+                                                   "disp_y",
+                                                   "disp_z",
+                                                   "disp_t",
+                                                   "t3",
+                                                   "t4",
+                                                   "t_source",
+                                                   "t_current",
+                                                   "t_sink",
+                                                   "bootstrap",
+                                                   "nothing"};
 
 int get_endian() {
   int iTest;
@@ -248,9 +300,9 @@ filehandle xqcd_file_open_write_mpi_milc(char *name, filetype *type,
   memcpy(&handle->type, type, sizeof(filetype));
   for (handle->rundimensions = 0;
        handle->type.head.dimensions[handle->rundimensions].type != dim_x &&
-           handle->type.head.dimensions[handle->rundimensions].type != dim_y &&
-           handle->type.head.dimensions[handle->rundimensions].type != dim_z &&
-           handle->type.head.dimensions[handle->rundimensions].type != dim_t;
+       handle->type.head.dimensions[handle->rundimensions].type != dim_y &&
+       handle->type.head.dimensions[handle->rundimensions].type != dim_z &&
+       handle->type.head.dimensions[handle->rundimensions].type != dim_t;
        handle->rundimensions++)
     ;
 
@@ -304,8 +356,8 @@ filehandle xqcd_file_open_write_mpi_milc(char *name, filetype *type,
   site *psSite;
   int flag;
 
-  if ((ones = malloc(sizeof(int) *sites_on_node)) == NULL ||
-      (dispmem = malloc(sizeof(int) *sites_on_node)) == NULL ||
+  if ((ones = malloc(sizeof(int) * sites_on_node)) == NULL ||
+      (dispmem = malloc(sizeof(int) * sites_on_node)) == NULL ||
       (dispfile = malloc(sizeof(int) * sites_on_node)) == NULL) {
     printf("Memory allocation failed when allocating variables : ones, "
            "dispmem, dispfile.\n");
@@ -324,7 +376,7 @@ filehandle xqcd_file_open_write_mpi_milc(char *name, filetype *type,
       switch (handle->type.head.dimensions[i].type) {
       case dim_x:
         for (j = 0; j < handle->type.head.dimensions[i].n_indices &&
-                        psSite->x != handle->type.head.dimensions[i].indices[j];
+                    psSite->x != handle->type.head.dimensions[i].indices[j];
              j++)
           ;
         if (j < handle->type.head.dimensions[i].n_indices) {
@@ -334,7 +386,7 @@ filehandle xqcd_file_open_write_mpi_milc(char *name, filetype *type,
         break;
       case dim_y:
         for (j = 0; j < handle->type.head.dimensions[i].n_indices &&
-                        psSite->y != handle->type.head.dimensions[i].indices[j];
+                    psSite->y != handle->type.head.dimensions[i].indices[j];
              j++)
           ;
         if (j < handle->type.head.dimensions[i].n_indices) {
@@ -344,7 +396,7 @@ filehandle xqcd_file_open_write_mpi_milc(char *name, filetype *type,
         break;
       case dim_z:
         for (j = 0; j < handle->type.head.dimensions[i].n_indices &&
-                        psSite->z != handle->type.head.dimensions[i].indices[j];
+                    psSite->z != handle->type.head.dimensions[i].indices[j];
              j++)
           ;
         if (j < handle->type.head.dimensions[i].n_indices) {
@@ -354,7 +406,7 @@ filehandle xqcd_file_open_write_mpi_milc(char *name, filetype *type,
         break;
       case dim_t:
         for (j = 0; j < handle->type.head.dimensions[i].n_indices &&
-                        psSite->t != handle->type.head.dimensions[i].indices[j];
+                    psSite->t != handle->type.head.dimensions[i].indices[j];
              j++)
           ;
         if (j < handle->type.head.dimensions[i].n_indices) {
@@ -761,7 +813,7 @@ int type_index2disp(filetype *type, int ind[][2]) {
 
     if (j < N_MAX_DIMENSIONS) {
       for (k = 0; k < type->head.dimensions[i].n_indices &&
-                      type->head.dimensions[i].indices[k] != ind[j][1];
+                  type->head.dimensions[i].indices[k] != ind[j][1];
            k++)
         ;
 

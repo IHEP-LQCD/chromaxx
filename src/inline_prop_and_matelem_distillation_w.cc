@@ -3,38 +3,37 @@
  *
  * Propagator calculation in distillation
  */
-#include <stdio.h>
 #include <complex>
-#include <stdlib.h>
 #include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
 
-#include "qdp.h"
+#include "actions/ferm/fermacts/fermact_factory_w.h"
+#include "actions/ferm/fermacts/fermacts_aggregate_w.h"
 #include "fermact.h"
 #include "inline_prop_and_matelem_distillation_w.h"
-#include "meas/inline/abs_inline_measurement_factory.h"
 #include "meas/glue/mesplq.h"
+#include "meas/inline/abs_inline_measurement_factory.h"
+#include "meas/inline/make_xml_file.h"
+#include "qdp.h"
+#include "qdp_disk_map_slice.h"
 #include "qdp_map_obj.h"
 #include "qdp_map_obj_disk.h"
 #include "qdp_map_obj_disk_multiple.h"
 #include "qdp_map_obj_memory.h"
-#include "qdp_disk_map_slice.h"
-#include "util/ferm/subset_vectors.h"
-#include "util/ferm/key_prop_distillation.h"
-#include "util/ferm/key_timeslice_colorvec.h"
-#include "util/ferm/key_prop_colorvec.h"
-#include "util/ferm/key_prop_matelem.h"
-#include "util/ferm/key_val_db.h"
-#include "util/ferm/transf.h"
-#include "util/ferm/spin_rep.h"
 #include "util/ferm/diractodr.h"
+#include "util/ferm/key_prop_colorvec.h"
+#include "util/ferm/key_prop_distillation.h"
+#include "util/ferm/key_prop_matelem.h"
+#include "util/ferm/key_timeslice_colorvec.h"
+#include "util/ferm/key_val_db.h"
+#include "util/ferm/spin_rep.h"
+#include "util/ferm/subset_vectors.h"
+#include "util/ferm/transf.h"
 #include "util/ferm/twoquark_contract_ops.h"
 #include "util/ft/sftmom.h"
 #include "util/ft/time_slice_set.h"
 #include "util/info/proginfo.h"
-#include "util/info/proginfo.h"
-#include "actions/ferm/fermacts/fermact_factory_w.h"
-#include "actions/ferm/fermacts/fermacts_aggregate_w.h"
-#include "meas/inline/make_xml_file.h"
 
 #include "meas/inline/io/named_objmap.h"
 
@@ -56,11 +55,10 @@ multi1d<SubsetVectorWeight_t> readEigVals(const std::string &meta) {
 
   std::string pat("/MODMetaData/Weights");
   //      multi1d<SubsetVectorWeight_t> eigenvalues;
-  multi1d<multi1d<Real> > eigens;
+  multi1d<multi1d<Real>> eigens;
   try {
     read(eigtop, pat, eigens);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << __func__ << ": Caught Exception reading meta= XX" << meta
                 << "XX   with path= " << pat << "   error= " << e << std::endl;
     QDP_abort(1);
@@ -75,7 +73,7 @@ multi1d<SubsetVectorWeight_t> readEigVals(const std::string &meta) {
 
   return eigenvalues;
 }
-}
+} // namespace
 
 //----------------------------------------------------------------------------
 namespace InlinePropAndMatElemDistillationIHEPEnv {
@@ -181,7 +179,7 @@ void write(XMLWriter &xml, const std::string &path, const Params &input) {
 
   pop(xml);
 }
-} // namespace InlinePropDistillationEnv
+} // namespace InlinePropAndMatElemDistillationIHEPEnv
 
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
@@ -189,15 +187,17 @@ namespace InlinePropAndMatElemDistillationIHEPEnv {
 //----------------------------------------------------------------------------
 // Convenience type
 typedef QDP::MapObjectDisk<KeyTimeSliceColorVec_t,
-                           TimeSliceIO<LatticeColorVectorF> > MOD_t;
+                           TimeSliceIO<LatticeColorVectorF>>
+    MOD_t;
 
 // Convenience type
 typedef QDP::MapObjectDiskMultiple<KeyTimeSliceColorVec_t,
-                                   TimeSliceIO<LatticeColorVectorF> > MODS_t;
+                                   TimeSliceIO<LatticeColorVectorF>>
+    MODS_t;
 
 // Convenience type
 typedef QDP::MapObjectMemory<KeyTimeSliceColorVec_t, SubLatticeColorVectorF>
-SUB_MOD_t;
+    SUB_MOD_t;
 
 // Anonymous namespace
 namespace {
@@ -323,8 +323,8 @@ std::list<KeyPropElementalOperator_t> getSnkKeys(int t_source, int spin_source,
   return keys;
 }
 
-} // end anonymous
-} // end namespace
+} // namespace
+} // namespace InlinePropAndMatElemDistillationIHEPEnv
 
 //----------------------------------------------------------------------------
 namespace InlinePropAndMatElemDistillationIHEPEnv {
@@ -336,7 +336,7 @@ AbsInlineMeasurement *createMeasurement(XMLReader &xml_in,
 
 //! Local registration flag
 bool registered = false;
-}
+} // namespace
 
 const std::string name = "PROP_AND_MATELEM_DISTILLATION_IHEP";
 
@@ -375,8 +375,7 @@ Params::Params(XMLReader &xml_in, const std::string &path) {
     if (paramtop.count("xml_file") != 0) {
       read(paramtop, "xml_file", xml_file);
     }
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << __func__ << ": Caught Exception reading XML: " << e
                 << std::endl;
     QDP_abort(1);
@@ -415,16 +414,15 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
   multi1d<LatticeColorMatrix> u;
   XMLBufferWriter gauge_xml;
   try {
-    u = TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix> >(
+    u = TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix>>(
         params.named_obj.gauge_id);
-    TheNamedObjMap::Instance().get(params.named_obj.gauge_id).getRecordXML(
-        gauge_xml);
-  }
-  catch (std::bad_cast) {
+    TheNamedObjMap::Instance()
+        .get(params.named_obj.gauge_id)
+        .getRecordXML(gauge_xml);
+  } catch (std::bad_cast) {
     QDPIO::cerr << name << ": caught dynamic cast error" << std::endl;
     QDP_abort(1);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << name << ": std::map call failed: " << e << std::endl;
     QDP_abort(1);
   }
@@ -492,17 +490,14 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
       //	QDPIO::cout << "Write to an xml file" << std::endl;
       //	XMLBufferWriter xml_buf(eigen_meta_data);
       //	write(xml_out, "Source_info", xml_buf);
-    }
-    catch (std::bad_cast) {
+    } catch (std::bad_cast) {
       QDPIO::cerr << name << ": caught dynamic cast error" << std::endl;
       QDP_abort(1);
-    }
-    catch (const std::string &e) {
+    } catch (const std::string &e) {
       QDPIO::cerr << name << ": error extracting source_header: " << e
                   << std::endl;
       QDP_abort(1);
-    }
-    catch (const char *e) {
+    } catch (const char *e) {
       QDPIO::cerr << name << ": Caught some char* exception:" << std::endl;
       QDPIO::cerr << e << std::endl;
       QDPIO::cerr << "Rethrowing" << std::endl;
@@ -553,14 +548,14 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
     QDPIO::cout << "FermAct = " << params.param.prop.fermact.id << std::endl;
 
     // Generic Wilson-Type stuff
-    Handle<FermionAction<T, P, Q> > S_f(
+    Handle<FermionAction<T, P, Q>> S_f(
         TheFermionActionFactory::Instance().createObject(
             params.param.prop.fermact.id, fermacttop,
             params.param.prop.fermact.path));
 
-    Handle<FermState<T, P, Q> > state(S_f->createState(u));
+    Handle<FermState<T, P, Q>> state(S_f->createState(u));
 
-    Handle<SystemSolver<LatticeFermion> > PP =
+    Handle<SystemSolver<LatticeFermion>> PP =
         S_f->qprop(state, params.param.prop.invParam);
 
     QDPIO::cout << "Suitable factory found: compute all the quark props"
@@ -580,9 +575,10 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
     //
     const int num_vecs = params.param.contract.num_vecs;
     const multi1d<int> &t_sources = params.param.contract.t_sources;
-    std::complex<double> peram_array
-        [params.param.contract.Nt_forward + params.param.contract.Nt_backward]
-        [4][4][params.param.contract.num_vecs][params.param.contract.num_vecs];
+    std::complex<double> peram_array[params.param.contract.Nt_forward +
+                                     params.param.contract.Nt_backward][4][4]
+                                    [params.param.contract.num_vecs]
+                                    [params.param.contract.num_vecs];
 
     FILE *fp1;
     fp1 = fopen(params.named_obj.prop_op_file.c_str(), "w");
@@ -607,7 +603,8 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
         if (1) {
           // The final perambulator
           QDP::MapObjectMemory<KeyPropElementalOperator_t,
-                               ValPropElementalOperator_t> peram;
+                               ValPropElementalOperator_t>
+              peram;
 
           // Initialize
           for (std::list<KeyPropElementalOperator_t>::const_iterator key =
@@ -693,8 +690,9 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
 
               // Sanity check
               if (badP) {
-                QDPIO::cerr << name << ": this is bad - did not get a finite "
-                                       "solution std::vector after num_tries= "
+                QDPIO::cerr << name
+                            << ": this is bad - did not get a finite "
+                               "solution std::vector after num_tries= "
                             << params.param.contract.num_tries << std::endl;
                 QDP_abort(1);
               }
@@ -711,8 +709,8 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
                         << "  time = " << snarss1.getTimeInSeconds() << " secs"
                         << std::endl;
 
-// The perambulator part
-// Loop over time
+            // The perambulator part
+            // Loop over time
 
 #ifndef BUILD_JIT_CONTRACTION_KERNELS
             for (int t_slice = 0; t_slice < Lt; ++t_slice) {
@@ -914,8 +912,7 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
     swatch.stop();
     QDPIO::cout << "Propagators computed: time= " << swatch.getTimeInSeconds()
                 << " secs" << std::endl;
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cout << name << ": caught exception around qprop: " << e
                 << std::endl;
     QDP_abort(1);
@@ -935,7 +932,7 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
 
   END_CODE();
 }
-}
+} // namespace InlinePropAndMatElemDistillationIHEPEnv
 
 } // namespace Chroma
 

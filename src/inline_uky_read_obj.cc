@@ -4,9 +4,9 @@
  * Named object writing
  */
 
+#include "inline_uky_read_obj.h"
 #include "meas/inline/abs_inline_measurement_factory.h"
 #include "meas/inline/io/named_objmap.h"
-#include "inline_uky_read_obj.h"
 #include "uky_read_obj_funcmap.h"
 
 namespace Chroma {
@@ -21,7 +21,7 @@ AbsInlineMeasurement *createMeasurement(XMLReader &xml_in,
 bool registered = false;
 
 const std::string name = "UKY_READ_NAMED_OBJECT";
-}
+} // namespace
 
 //! Register all the factories
 bool registerAll() {
@@ -72,8 +72,7 @@ Params::Params(XMLReader &xml_in, const std::string &path) {
 
     // Read in the destination
     read(paramtop, "File", file);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << __func__ << ": caught Exception reading XML: " << e
                 << std::endl;
     QDP_abort(1);
@@ -112,12 +111,10 @@ void InlineMeas::operator()(unsigned long update_no, XMLWriter &xml_out) {
 
     QDPIO::cout << "UKY Object successfully read: time= "
                 << swatch.getTimeInSeconds() << " secs" << std::endl;
-  }
-  catch (std::bad_cast) {
+  } catch (std::bad_cast) {
     QDPIO::cerr << name << ": cast error" << std::endl;
     QDP_abort(1);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << name << ": error message: " << e << std::endl;
     QDP_abort(1);
   }
@@ -128,5 +125,5 @@ void InlineMeas::operator()(unsigned long update_no, XMLWriter &xml_out) {
 
   END_CODE();
 }
-}
-}
+} // namespace InlineUKYReadNamedObjEnv
+} // namespace Chroma

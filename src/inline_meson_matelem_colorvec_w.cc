@@ -3,25 +3,25 @@
  * elements
  */
 
-#include <stdio.h>
-#include <complex>
-#include <stdlib.h>
-#include <sstream>
-#include "handle.h"
 #include "inline_meson_matelem_colorvec_w.h"
+#include "handle.h"
+#include "meas/glue/mesplq.h"
 #include "meas/inline/abs_inline_measurement_factory.h"
+#include "meas/inline/make_xml_file.h"
+#include "meas/smear/displace.h"
 #include "meas/smear/link_smearing_aggregate.h"
 #include "meas/smear/link_smearing_factory.h"
-#include "meas/smear/displace.h"
-#include "meas/glue/mesplq.h"
-#include "util/ferm/subset_vectors.h"
 #include "util/ferm/key_val_db.h"
+#include "util/ferm/subset_vectors.h"
 #include "util/ft/sftmom.h"
 #include "util/info/proginfo.h"
-#include "meas/inline/make_xml_file.h"
+#include <complex>
+#include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
 
-#include "meas/inline/io/named_objmap.h"
 #include "io_dist.h"
+#include "meas/inline/io/named_objmap.h"
 #define COLORVEC_MATELEM_TYPE_ZERO 0
 #define COLORVEC_MATELEM_TYPE_ONE 1
 #define COLORVEC_MATELEM_TYPE_MONE -1
@@ -112,9 +112,9 @@ void read(XMLReader &xml, const std::string &path,
 }
 
 //! Write named objects
-void
-write(XMLWriter &xml, const std::string &path,
-      const InlineMesonMatElemColorVecIHEPEnv::Params::NamedObject_t &input) {
+void write(
+    XMLWriter &xml, const std::string &path,
+    const InlineMesonMatElemColorVecIHEPEnv::Params::NamedObject_t &input) {
   push(xml, path);
 
   write(xml, "gauge_id", input.gauge_id);
@@ -129,7 +129,7 @@ void write(XMLWriter &xml, const std::string &path,
            const InlineMesonMatElemColorVecIHEPEnv::Params &param) {
   param.writeXML(xml, path);
 }
-}
+} // namespace InlineMesonMatElemColorVecIHEPEnv
 
 namespace InlineMesonMatElemColorVecIHEPEnv {
 // Anonymous namespace for registration
@@ -141,7 +141,7 @@ AbsInlineMeasurement *createMeasurement(XMLReader &xml_in,
 
 //! Local registration flag
 bool registered = false;
-}
+} // namespace
 
 const std::string name = "MESON_MATELEM_COLORVEC_IHEP";
 
@@ -171,7 +171,7 @@ StandardOutputStream &operator<<(StandardOutputStream &os,
 
   return os;
 }
-}
+} // namespace
 
 //----------------------------------------------------------------------------
 // Param stuff
@@ -201,8 +201,7 @@ Params::Params(XMLReader &xml_in, const std::string &path) {
     if (paramtop.count("xml_file") != 0) {
       read(paramtop, "xml_file", xml_file);
     }
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << __func__ << ": Caught Exception reading XML: " << e
                 << std::endl;
     QDP_abort(1);
@@ -368,28 +367,27 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
   // Test and grab a reference to the gauge field
   XMLBufferWriter gauge_xml;
   try {
-    TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix> >(
+    TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix>>(
         params.named_obj.gauge_id);
-    TheNamedObjMap::Instance().get(params.named_obj.gauge_id).getRecordXML(
-        gauge_xml);
+    TheNamedObjMap::Instance()
+        .get(params.named_obj.gauge_id)
+        .getRecordXML(gauge_xml);
 
     // NB We are just checking this is here.
     // TheNamedObjMap::Instance().getData< Handle<
     // MapObject<int,EVPair<LatticeColorVector> > >
     // >(params.named_obj.colorvec_id);
-  }
-  catch (std::bad_cast) {
+  } catch (std::bad_cast) {
     QDPIO::cerr << name << ": caught dynamic cast error" << std::endl;
     QDP_abort(1);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << name << ": std::map call failed: " << e << std::endl;
     QDP_abort(1);
   }
 
   // Cast should be valid now
   const multi1d<LatticeColorMatrix> &u =
-      TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix> >(
+      TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix>>(
           params.named_obj.gauge_id);
   /*
         const MapObject<int,EVPair<LatticeColorVector> >& eigen_source =
@@ -466,8 +464,7 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
             params.param.link_smearing.path));
 
     (*linkSmearing)(u_smr);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << name << ": Caught Exception link smearing: " << e
                 << std::endl;
     QDP_abort(1);
@@ -496,9 +493,9 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
 
   push(xml_out, "ElementalOps");
   // declare the array for store binary data...Momentum must be set to zero
-  std::complex<double> vector_products
-      [Layout::lattSize()[params.param.decay_dir]][params.param.num_vecs]
-      [params.param.num_vecs];
+  std::complex<double>
+      vector_products[Layout::lattSize()[params.param.decay_dir]]
+                     [params.param.num_vecs][params.param.num_vecs];
   // Loop over all time slices for the source. This is the same
   // as the subsets for  phases
 
@@ -606,7 +603,7 @@ void InlineMeas::func(unsigned long update_no, XMLWriter &xml_out) {
 
   END_CODE();
 } // func
-} // namespace InlineMesonMatElemColorVecEnv
+} // namespace InlineMesonMatElemColorVecIHEPEnv
 
 /*! @} */ // end of group hadron
 

@@ -5,8 +5,8 @@ namespace IHEP {
 multi1d<LatticeColorVector> read_dist_vec(std::string filename, int Nt,
                                           int Num_vecs) {
   multi1d<LatticeColorVector> vec_array(Num_vecs);
-  QDP::MapObjectDisk<KeyTimeSliceColorVec_t, TimeSliceIO<LatticeColorVectorF> >
-  eigen_source;
+  QDP::MapObjectDisk<KeyTimeSliceColorVec_t, TimeSliceIO<LatticeColorVectorF>>
+      eigen_source;
   eigen_source.open(filename);
   std::string user_str;
   eigen_source.getUserdata(user_str);
@@ -26,4 +26,4 @@ multi1d<LatticeColorVector> read_dist_vec(std::string filename, int Nt,
 
   return vec_array;
 }
-}
+} // namespace IHEP

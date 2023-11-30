@@ -1,11 +1,11 @@
-#include "meas/inline/abs_inline_measurement_factory.h"
 #include "inline_tests.h"
+#include "io_general_class.h"
 #include "meas/glue/mesplq.h"
-#include "meas/inline/make_xml_file.h"
+#include "meas/inline/abs_inline_measurement_factory.h"
 #include "meas/inline/io/named_objmap.h"
+#include "meas/inline/make_xml_file.h"
 #include "util/ft/sftmom.h"
 #include <time.h>
-#include "io_general_class.h"
 
 namespace Chroma {
 namespace InlineTestsEnv {
@@ -81,8 +81,7 @@ InlinetestsParams::InlinetestsParams(XMLReader &xml_in,
     if (paramtop.count("xml_file") != 0) {
       read(paramtop, "xml_file", xml_file);
     }
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << "Caught Exception reading XML: " << e << std::endl;
     QDP_abort(1);
   }
@@ -120,7 +119,7 @@ void Inlinetests::func(unsigned long update_no, XMLWriter &xml_out) {
 
   // Grab the gauge field
   multi1d<LatticeColorMatrix> u =
-      TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix> >(
+      TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix>>(
           params.named_obj.gauge_id);
   // Calculate some gauge invariant observables
   MesPlq(xml_out, "Observables", u);

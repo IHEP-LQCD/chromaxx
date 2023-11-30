@@ -5,15 +5,15 @@
  *  2-plaq term. Taken from Morningstar-Peardon, hep-lat/9911003
  */
 
-#include "chromabase.h"
 #include "aniso_spectrum_gaugeact2.h"
 #include "actions/gauge/gaugeacts/gaugeact_factory.h"
 #include "actions/gauge/gaugestates/gauge_createstate_aggregate.h"
+#include "chromabase.h"
 
 namespace Chroma {
 
 namespace AnisoSpectrumGaugeActEnv2 {
-GaugeAction<multi1d<LatticeColorMatrix>, multi1d<LatticeColorMatrix> > *
+GaugeAction<multi1d<LatticeColorMatrix>, multi1d<LatticeColorMatrix>> *
 createGaugeAct(XMLReader &xml, const std::string &path) {
   return new AnisoSpectrumGaugeAct2(CreateGaugeStateEnv::reader(xml, path),
                                     AnisoSpectrumGaugeAct2Params(xml, path));
@@ -34,7 +34,7 @@ bool registerAll() {
   }
   return success;
 }
-}
+} // namespace AnisoSpectrumGaugeActEnv2
 
 AnisoSpectrumGaugeAct2Params::AnisoSpectrumGaugeAct2Params(
     XMLReader &xml_in, const std::string &path) {
@@ -46,8 +46,7 @@ AnisoSpectrumGaugeAct2Params::AnisoSpectrumGaugeAct2Params(
     read(paramtop, "u_t", u_t);
     read(paramtop, "omega", omega);
     read(paramtop, "AnisoParam", aniso);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << "Error reading XML: " << e << std::endl;
     QDP_abort(1);
   }
@@ -73,7 +72,7 @@ void write(XMLWriter &xml, const std::string &path,
 }
 
 // Private initializer
-void AnisoSpectrumGaugeAct2::init(Handle<CreateGaugeState<P, Q> > cgs) {
+void AnisoSpectrumGaugeAct2::init(Handle<CreateGaugeState<P, Q>> cgs) {
   START_CODE();
 
   // Do the plaquette first. Spatial and temporal coeffs
@@ -111,4 +110,4 @@ void AnisoSpectrumGaugeAct2::init(Handle<CreateGaugeState<P, Q> > cgs) {
 
   END_CODE();
 }
-}
+} // namespace Chroma

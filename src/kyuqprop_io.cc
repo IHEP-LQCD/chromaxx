@@ -4,10 +4,10 @@
  * @brief  Read/write a Kentucky quark propagator
  */
 
-#include "chromabase.h"
 #include "io/kyuqprop_io.h"
-#include "util/ferm/transf.h"
+#include "chromabase.h"
 #include "util/ferm/diractodr.h"
+#include "util/ferm/transf.h"
 #include "util/ft/sftmom.h"
 
 namespace Chroma {

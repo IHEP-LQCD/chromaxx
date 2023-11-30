@@ -2,10 +2,10 @@
  *  \brief Write object function std::map
  */
 
-#include "named_obj.h"
-#include "meas/inline/io/named_objmap.h"
 #include "uky_write_obj_funcmap.h"
 #include "kyuqprop_io.h"
+#include "meas/inline/io/named_objmap.h"
+#include "named_obj.h"
 
 namespace Chroma {
 
@@ -36,5 +36,5 @@ bool registerAll() {
   }
   return success;
 }
-}
-}
+} // namespace UKYWriteObjCallMapEnv
+} // namespace Chroma

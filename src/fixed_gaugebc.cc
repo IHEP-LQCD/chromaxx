@@ -9,11 +9,11 @@ namespace Chroma {
 
 namespace FixedGaugeBCEnv {
 //! Calllback function to register with the factory
-GaugeBC<multi1d<LatticeColorMatrix>, multi1d<LatticeColorMatrix> > *
+GaugeBC<multi1d<LatticeColorMatrix>, multi1d<LatticeColorMatrix>> *
 createGaugeBC(XMLReader &xml, const std::string &path) {
   QDPIO::cout << "Factory Callback: Creating FixedGaugeBC " << std::endl;
   return new FixedGaugeBC<multi1d<LatticeColorMatrix>,
-                          multi1d<LatticeColorMatrix> >(
+                          multi1d<LatticeColorMatrix>>(
       FixedGaugeBCParams(xml, path));
 }
 
@@ -32,7 +32,7 @@ bool registerAll() {
   }
   return success;
 }
-}
+} // namespace FixedGaugeBCEnv
 
 FixedGaugeBCParams::FixedGaugeBCParams(XMLReader &xml,
                                        const std::string &path) {
@@ -42,8 +42,7 @@ FixedGaugeBCParams::FixedGaugeBCParams(XMLReader &xml,
   try {
     read(paramtop, "./boundary", boundary);
     read(paramtop, "./maxlink", maxlink);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << "Error reading XML: " << e << std::endl;
     QDP_abort(1);
   }

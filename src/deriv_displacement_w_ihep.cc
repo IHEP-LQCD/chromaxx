@@ -5,13 +5,13 @@
 #include "chromabase.h"
 
 #include "deriv_quark_displacement_w_ihep.h"
-#include "meas/smear/quark_displacement_factory.h"
-#include "meas/smear/quark_displacement_aggregate.h"
 #include "meas/smear/displace.h"
+#include "meas/smear/quark_displacement_aggregate.h"
+#include "meas/smear/quark_displacement_factory.h"
 
-#include "util/ferm/symtensor.h"
 #include "util/ferm/antisymtensor.h"
 #include "util/ferm/etensor.h"
+#include "util/ferm/symtensor.h"
 
 namespace Chroma {
 namespace DerivQuarkDisplacementEnv {
@@ -42,13 +42,13 @@ QuarkDisplacement<LatticePropagator> *
 mesRhoxNablaEDisplace(XMLReader &xml_in, const std::string &path) {
   return new MesRhoxNablaEDisplace<LatticePropagator>(ParamsDir(xml_in, path));
 }
-}
+} // namespace
 
 // Construct (RhoxNabla_E) source
 template <>
-void MesRhoxNablaEDisplace<LatticePropagator>::
-operator()(LatticePropagator &tmp, const multi1d<LatticeColorMatrix> &u,
-           enum PlusMinus isign) const {
+void MesRhoxNablaEDisplace<LatticePropagator>::operator()(
+    LatticePropagator &tmp, const multi1d<LatticeColorMatrix> &u,
+    enum PlusMinus isign) const {
   START_CODE();
 
   LatticePropagator fin = zero;
@@ -81,6 +81,6 @@ bool registerAll() {
   }
   return success;
 }
-}
-}
-}
+} // namespace IHEP
+} // namespace DerivQuarkDisplacementEnv
+} // namespace Chroma

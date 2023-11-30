@@ -35,9 +35,9 @@
  * format
  */
 
+#include "BuildingBlocks_w_ihep.h"
 #include "chromabase.h"
 #include "util/ft/sftmom.h"
-#include "BuildingBlocks_w_ihep.h"
 
 #include <iostream>
 
@@ -91,7 +91,7 @@ void BkwdFrwdTr(const LatticePropagator &B, const LatticePropagator &F,
   Timer.start();
 
   for (int o = 0; o < NumO; o++) {
-//  BinaryWriters(f,o).write( NLinks );
+    //  BinaryWriters(f,o).write( NLinks );
 
 #if _DEBUG_BB_C_ == 1
     {

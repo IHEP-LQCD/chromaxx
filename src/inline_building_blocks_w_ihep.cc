@@ -5,17 +5,17 @@
  */
 
 #include "inline_building_blocks_w_ihep.h"
-#include "meas/inline/abs_inline_measurement_factory.h"
-#include "meas/glue/mesplq.h"
-#include "util/ft/sftmom.h"
 #include "BuildingBlocks_w_ihep.h"
-#include "util/info/proginfo.h"
+#include "meas/glue/mesplq.h"
+#include "meas/inline/abs_inline_measurement_factory.h"
 #include "meas/inline/make_xml_file.h"
+#include "util/ft/sftmom.h"
+#include "util/info/proginfo.h"
 
 #include "meas/inline/io/named_objmap.h"
 
-#include "actions/ferm/fermstates/ferm_createstate_factory_w.h"
 #include "actions/ferm/fermstates/ferm_createstate_aggregate_w.h"
+#include "actions/ferm/fermstates/ferm_createstate_factory_w.h"
 
 namespace Chroma {
 namespace InlineBuildingBlocksIHEPEnv {
@@ -28,7 +28,7 @@ AbsInlineMeasurement *createMeasurement(XMLReader &xml_in,
 
 //! Local registration flag
 bool registered = false;
-}
+} // namespace
 
 const std::string name = "BUILDING_BLOCKS_IHEP";
 
@@ -43,7 +43,7 @@ bool registerAll() {
   }
   return success;
 }
-}
+} // namespace InlineBuildingBlocksIHEPEnv
 
 //! Param input
 void read(XMLReader &xml, const std::string &path,
@@ -189,8 +189,7 @@ InlineBuildingBlocksIHEPParams::InlineBuildingBlocksIHEPParams(
     if (paramtop.count("xml_file") != 0) {
       read(paramtop, "xml_file", xml_file);
     }
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << __func__ << ": Caught Exception reading XML: " << e
                 << std::endl;
     QDP_abort(1);
@@ -277,7 +276,7 @@ void InlineBuildingBlocksIHEP::func(unsigned long update_no,
   XMLBufferWriter gauge_xml;
 
   try {
-    U = TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix> >(
+    U = TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix>>(
         params.bb.GaugeId);
     TheNamedObjMap::Instance().get(params.bb.GaugeId).getRecordXML(gauge_xml);
 
@@ -288,29 +287,27 @@ void InlineBuildingBlocksIHEP::func(unsigned long update_no,
       XMLReader fermtop(xml_s);
 
       Handle<CreateFermState<LatticeFermion, multi1d<LatticeColorMatrix>,
-                             multi1d<LatticeColorMatrix> > >
-      cfs(TheCreateFermStateFactory::Instance().createObject(
-          params.param.cfs.id, fermtop, params.param.cfs.path));
+                             multi1d<LatticeColorMatrix>>>
+          cfs(TheCreateFermStateFactory::Instance().createObject(
+              params.param.cfs.id, fermtop, params.param.cfs.path));
 
       Handle<FermState<LatticeFermion, multi1d<LatticeColorMatrix>,
-                       multi1d<LatticeColorMatrix> > > state((*cfs)(U));
+                       multi1d<LatticeColorMatrix>>>
+          state((*cfs)(U));
 
       // Pull the u fields back out from the state since they might have been
       // munged with fermBC's
       U = state->getLinks();
     }
-  }
-  catch (std::bad_cast) {
+  } catch (std::bad_cast) {
     QDPIO::cerr << InlineBuildingBlocksIHEPEnv::name
                 << ": caught dynamic cast error" << std::endl;
     QDP_abort(1);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << InlineBuildingBlocksIHEPEnv::name
                 << ": std::map call failed: " << e << std::endl;
     QDP_abort(1);
-  }
-  catch (...) {
+  } catch (...) {
     QDPIO::cerr << InlineBuildingBlocksIHEPEnv::name
                 << ": caught generic exception " << std::endl;
     QDP_abort(1);
@@ -353,10 +350,12 @@ void InlineBuildingBlocksIHEP::func(unsigned long update_no,
     // Snarf the frwd prop info. This is will throw if the frwd prop id is not
     // there
     XMLReader FrwdPropXML, FrwdPropRecordXML;
-    TheNamedObjMap::Instance().get(params.bb.FrwdPropId).getFileXML(
-        FrwdPropXML);
-    TheNamedObjMap::Instance().get(params.bb.FrwdPropId).getRecordXML(
-        FrwdPropRecordXML);
+    TheNamedObjMap::Instance()
+        .get(params.bb.FrwdPropId)
+        .getFileXML(FrwdPropXML);
+    TheNamedObjMap::Instance()
+        .get(params.bb.FrwdPropId)
+        .getRecordXML(FrwdPropRecordXML);
 
     // Try to invert this record XML into a ChromaProp struct
     {
@@ -379,13 +378,11 @@ void InlineBuildingBlocksIHEP::func(unsigned long update_no,
       write(XmlOut, "FrwdPropCheck", FrwdPropCheck);
       pop(XmlOut);
     }
-  }
-  catch (std::bad_cast) {
+  } catch (std::bad_cast) {
     QDPIO::cerr << InlineBuildingBlocksIHEPEnv::name
                 << ": caught dynamic cast error" << std::endl;
     QDP_abort(1);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << InlineBuildingBlocksIHEPEnv::name
                 << ": forward prop: error message: " << e << std::endl;
     QDP_abort(1);
@@ -455,13 +452,11 @@ void InlineBuildingBlocksIHEP::func(unsigned long update_no,
         write(XmlOut, "BkwdPropCheck", BkwdPropCheck);
         pop(XmlOut);
       }
-    }
-    catch (std::bad_cast) {
+    } catch (std::bad_cast) {
       QDPIO::cerr << InlineBuildingBlocksIHEPEnv::name
                   << ": forward prop: caught dynamic cast error" << std::endl;
       QDP_abort(1);
-    }
-    catch (const std::string &e) {
+    } catch (const std::string &e) {
       QDPIO::cerr << InlineBuildingBlocksIHEPEnv::name
                   << ": forward prop: error message: " << e << std::endl;
       QDP_abort(1);
@@ -488,8 +483,8 @@ void InlineBuildingBlocksIHEP::func(unsigned long update_no,
 
     QDPIO::cout << "Seqsource name  = " << seqsource_header.seqsrc.id
                 << std::endl;
-    QDPIO::cout << "Gamma insertion = " << params.bb.BkwdProps[loop]
-                                               .GammaInsertion << std::endl;
+    QDPIO::cout << "Gamma insertion = "
+                << params.bb.BkwdProps[loop].GammaInsertion << std::endl;
     QDPIO::cout << "Flavor          = " << params.bb.BkwdProps[loop].Flavor
                 << std::endl;
 
@@ -677,4 +672,4 @@ void InlineBuildingBlocksIHEP::func(unsigned long update_no,
 
   END_CODE();
 }
-}
+} // namespace Chroma

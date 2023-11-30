@@ -5,22 +5,22 @@
  * Propagator calculations
  */
 
-#include "fermact.h"
 #include "inline_linear_divergence.h"
-#include "meas/inline/abs_inline_measurement_factory.h"
+#include "actions/ferm/fermacts/fermact_factory_w.h"
+#include "actions/ferm/fermacts/fermacts_aggregate_w.h"
+#include "fermact.h"
 #include "meas/glue/mesplq.h"
+#include "meas/inline/abs_inline_measurement_factory.h"
+#include "meas/inline/make_xml_file.h"
 #include "util/ft/sftmom.h"
 #include "util/info/proginfo.h"
 #include "util/info/unique_id.h"
-#include "actions/ferm/fermacts/fermact_factory_w.h"
-#include "actions/ferm/fermacts/fermacts_aggregate_w.h"
-#include "meas/inline/make_xml_file.h"
 
 #include "meas/inline/io/named_objmap.h"
 
+#include "io_general_class.h"
 #include "util/ferm/transf.h"
 #include <time.h>
-#include "io_general_class.h"
 
 namespace Chroma {
 namespace InlineLinearDivergenceEnv {
@@ -129,8 +129,7 @@ InlineLinearDivergenceParams::InlineLinearDivergenceParams(
     if (paramtop.count("xml_file") != 0) {
       read(paramtop, "xml_file", xml_file);
     }
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << __func__ << ": Caught Exception reading XML: " << e
                 << std::endl;
     QDP_abort(1);
@@ -194,23 +193,22 @@ void InlineLinearDivergence::func(unsigned long update_no, XMLWriter &xml_out) {
   // Test and grab a reference to the gauge field
   XMLBufferWriter gauge_xml;
   try {
-    TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix> >(
+    TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix>>(
         params.named_obj.gauge_id);
-    TheNamedObjMap::Instance().get(params.named_obj.gauge_id).getRecordXML(
-        gauge_xml);
-  }
-  catch (std::bad_cast) {
+    TheNamedObjMap::Instance()
+        .get(params.named_obj.gauge_id)
+        .getRecordXML(gauge_xml);
+  } catch (std::bad_cast) {
     QDPIO::cerr << InlineLinearDivergenceEnv::name
                 << ": caught dynamic cast error" << std::endl;
     QDP_abort(1);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << InlineLinearDivergenceEnv::name
                 << ": std::map call failed: " << e << std::endl;
     QDP_abort(1);
   }
   const multi1d<LatticeColorMatrix> &u =
-      TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix> >(
+      TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix>>(
           params.named_obj.gauge_id);
 
   push(xml_out, "propagator");
@@ -318,8 +316,13 @@ void InlineLinearDivergence::func(unsigned long update_no, XMLWriter &xml_out) {
         trace(quark_prop_source * adj(quark_prop_source)), phases.getSet());
     if (Layout::primaryNode()) {
       for (int it = 0; it < Layout::lattSize()[3]; it++)
+#if defined(QDP_IS_QDPJIT)
         printf("srcNROM:%4d%13.5f\n", it,
                source_corr[it].elem().elem().elem().real().elem());
+#else
+        printf("srcNROM:%4d%13.5f\n", it,
+               source_corr[it].elem().elem().elem().real());
+#endif
       fflush(stdout);
     }
   }
@@ -351,11 +354,11 @@ void InlineLinearDivergence::func(unsigned long update_no, XMLWriter &xml_out) {
       typedef multi1d<LatticeColorMatrix> Q;
 
       // Generic Wilson-Type stuff
-      Handle<FermionAction<T, P, Q> > S_f(
+      Handle<FermionAction<T, P, Q>> S_f(
           TheFermionActionFactory::Instance().createObject(
               params.param.fermact.id, fermacttop, params.param.fermact.path));
 
-      Handle<FermState<T, P, Q> > state(S_f->createState(u));
+      Handle<FermState<T, P, Q>> state(S_f->createState(u));
 
       QDPIO::cout << "Suitable factory found: compute the quark prop"
                   << std::endl;
@@ -374,8 +377,7 @@ void InlineLinearDivergence::func(unsigned long update_no, XMLWriter &xml_out) {
                   << " secs" << std::endl;
 
       success = true;
-    }
-    catch (const std::string &e) {
+    } catch (const std::string &e) {
       QDPIO::cout << InlineLinearDivergenceEnv::name
                   << ": caught exception around quarkprop: " << e << std::endl;
     }

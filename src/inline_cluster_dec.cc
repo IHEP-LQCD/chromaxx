@@ -5,19 +5,19 @@
  * Propagator calculations
  */
 
-#include "fermact.h"
 #include "inline_cluster_dec.h"
+#include "fermact.h"
+#include "io_general_class.h"
+#include "meas/glue/mesplq.h"
 #include "meas/inline/abs_inline_measurement_factory.h"
+#include "meas/inline/io/named_objmap.h"
+#include "meas/inline/make_xml_file.h"
 #include "util/ferm/transf.h"
 #include "util/ft/sftmom.h"
+#include "util/gauge/shift2.h"
 #include "util/info/proginfo.h"
 #include "util/info/unique_id.h"
-#include "util/gauge/shift2.h"
-#include "meas/glue/mesplq.h"
-#include "meas/inline/make_xml_file.h"
-#include "meas/inline/io/named_objmap.h"
 #include <time.h>
-#include "io_general_class.h"
 
 namespace Chroma {
 namespace InlineClusterDecEnv {
@@ -81,8 +81,7 @@ InlineClusterDecParams::InlineClusterDecParams(XMLReader &xml_in,
     read(paramtop, "NamedObject", named_obj);
 
     read(paramtop, "iog_file", iog_file);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << __func__ << ": Caught Exception reading XML: " << e
                 << std::endl;
     QDP_abort(1);
@@ -141,23 +140,22 @@ void InlineClusterDec::func(unsigned long update_no, XMLWriter &xml_out) {
   // Test and grab a reference to the gauge field
   XMLBufferWriter gauge_xml;
   try {
-    TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix> >(
+    TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix>>(
         params.named_obj.gauge_id);
-    TheNamedObjMap::Instance().get(params.named_obj.gauge_id).getRecordXML(
-        gauge_xml);
-  }
-  catch (std::bad_cast) {
+    TheNamedObjMap::Instance()
+        .get(params.named_obj.gauge_id)
+        .getRecordXML(gauge_xml);
+  } catch (std::bad_cast) {
     QDPIO::cerr << InlineClusterDecEnv::name << ": caught dynamic cast error"
                 << std::endl;
     QDP_abort(1);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << InlineClusterDecEnv::name << ": std::map call failed: " << e
                 << std::endl;
     QDP_abort(1);
   }
   const multi1d<LatticeColorMatrix> &u =
-      TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix> >(
+      TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix>>(
           params.named_obj.gauge_id);
 
   // Print out basic program info
@@ -203,7 +201,7 @@ void InlineClusterDec::func(unsigned long update_no, XMLWriter &xml_out) {
   multi2d<Double> glue3(nrcut, half_length);
   Double vac0;
   Double dummy;
-  multi1d<multi1d<DComplex> > plaq(6);
+  multi1d<multi1d<DComplex>> plaq(6);
   int mu;
   int nu;
   int plane;

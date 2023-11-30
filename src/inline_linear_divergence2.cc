@@ -5,24 +5,24 @@
  * Propagator calculations
  */
 
-#include "fermact.h"
 #include "inline_linear_divergence2.h"
-#include "meas/inline/abs_inline_measurement_factory.h"
+#include "actions/ferm/fermacts/fermact_factory_w.h"
+#include "actions/ferm/fermacts/fermacts_aggregate_w.h"
+#include "fermact.h"
 #include "meas/glue/mesplq.h"
+#include "meas/inline/abs_inline_measurement_factory.h"
+#include "meas/inline/make_xml_file.h"
 #include "util/ft/sftmom.h"
 #include "util/info/proginfo.h"
 #include "util/info/unique_id.h"
-#include "actions/ferm/fermacts/fermact_factory_w.h"
-#include "actions/ferm/fermacts/fermacts_aggregate_w.h"
-#include "meas/inline/make_xml_file.h"
 
 #include "meas/inline/io/named_objmap.h"
 
 #include "meas/smear/no_quark_displacement.h"
 
+#include "io_general_class.h"
 #include "util/ferm/transf.h"
 #include <time.h>
-#include "io_general_class.h"
 
 namespace Chroma {
 namespace InlineLinearDivergence2Env {
@@ -111,8 +111,7 @@ InlineLinearDivergence2Params::InlineLinearDivergence2Params(
     read(paramtop, "NamedObject", named_obj);
 
     read(paramtop, "iog_file", iog_file);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << __func__ << ": Caught Exception reading XML: " << e
                 << std::endl;
     QDP_abort(1);
@@ -186,13 +185,11 @@ void readSinkProp(SinkPropContainer_t &s, const std::string &id) {
       else
         s.sink_disp_type = NoQuarkDisplacementEnv::getName();
     }
-  }
-  catch (std::bad_cast) {
+  } catch (std::bad_cast) {
     QDPIO::cerr << InlineLinearDivergence2Env::name
                 << ": caught dynamic cast error" << std::endl;
     QDP_abort(1);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << InlineLinearDivergence2Env::name << ": error message: " << e
                 << std::endl;
     QDP_abort(1);
@@ -214,11 +211,11 @@ void readSinkProp(SinkPropContainer_t &s, const std::string &id) {
 
   try {
     s.bc = getFermActBoundary(s.prop_header.prop_header.fermact);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << InlineLinearDivergence2Env::name
                 << ": caught exception. No BC found in these headers. Will "
-                   "assume dirichlet: " << e << std::endl;
+                   "assume dirichlet: "
+                << e << std::endl;
   }
 
   QDPIO::cout << "FermAct = " << s.prop_header.prop_header.fermact.id
@@ -227,9 +224,9 @@ void readSinkProp(SinkPropContainer_t &s, const std::string &id) {
 }
 
 //! Read all sinks
-void
-readAllSinks(AllSinkProps_t &s,
-             InlineLinearDivergence2Params::NamedObject_t::Props_t sink_pair) {
+void readAllSinks(
+    AllSinkProps_t &s,
+    InlineLinearDivergence2Params::NamedObject_t::Props_t sink_pair) {
   QDPIO::cout << "Attempt to parse forward propagator = " << sink_pair.first_id
               << std::endl;
   readSinkProp(s.sink_prop_1, sink_pair.first_id);
@@ -277,23 +274,22 @@ void InlineLinearDivergence2::func(unsigned long update_no,
   // Test and grab a reference to the gauge field
   XMLBufferWriter gauge_xml;
   try {
-    TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix> >(
+    TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix>>(
         params.named_obj.gauge_id);
-    TheNamedObjMap::Instance().get(params.named_obj.gauge_id).getRecordXML(
-        gauge_xml);
-  }
-  catch (std::bad_cast) {
+    TheNamedObjMap::Instance()
+        .get(params.named_obj.gauge_id)
+        .getRecordXML(gauge_xml);
+  } catch (std::bad_cast) {
     QDPIO::cerr << InlineLinearDivergence2Env::name
                 << ": caught dynamic cast error" << std::endl;
     QDP_abort(1);
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDPIO::cerr << InlineLinearDivergence2Env::name
                 << ": std::map call failed: " << e << std::endl;
     QDP_abort(1);
   }
   const multi1d<LatticeColorMatrix> &u =
-      TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix> >(
+      TheNamedObjMap::Instance().getData<multi1d<LatticeColorMatrix>>(
           params.named_obj.gauge_id);
 
   push(xml_out, "propagator");

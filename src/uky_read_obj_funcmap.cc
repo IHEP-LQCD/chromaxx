@@ -2,10 +2,10 @@
  *  \brief Read object function std::map
  */
 
-#include "named_obj.h"
-#include "meas/inline/io/named_objmap.h"
 #include "uky_read_obj_funcmap.h"
 #include "kyuqprop_io.h"
+#include "meas/inline/io/named_objmap.h"
+#include "named_obj.h"
 
 namespace Chroma {
 
@@ -54,8 +54,7 @@ void UKYReadLatProp(const std::string &buffer_id, const std::string &file) {
     std::istringstream is(bufcontent);
     record_xml.open(is);
 #endif
-  }
-  catch (const std::string &e) {
+  } catch (const std::string &e) {
     QDP_error_exit("Error in readukyqprop: %s", e.c_str());
   }
   /////////////////////////////////////////////
@@ -87,5 +86,5 @@ bool registerAll() {
   }
   return success;
 }
-}
-}
+} // namespace UKYReadObjCallMapEnv
+} // namespace Chroma
